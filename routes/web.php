@@ -24,6 +24,7 @@ Route::post('/admin/logout', [LoginController::class, 'logout'])->name('logout')
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard']);
     Route::get('/projects', [AdminProjectController::class, 'index']);
+    Route::post('/projects/reorder', [AdminProjectController::class, 'reorder']);
     Route::post('/projects', [AdminProjectController::class, 'store']);
     Route::post('/projects/{project}', [AdminProjectController::class, 'update']);
     Route::delete('/projects/{project}', [AdminProjectController::class, 'destroy']);

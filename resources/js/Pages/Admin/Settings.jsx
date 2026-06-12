@@ -26,11 +26,13 @@ function save(key, value, files = {}) {
     router.post(`/admin/settings/${key}`, form, { forceFormData: true });
 }
 
-// ── Shared: list manager with display + inline edit ───────────────────────────
+// ── Shared: list manager with display + inline edit + drag-to-reorder ─────────
 function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, saveKey, saveItems, noSave, onDirty }) {
     const [editIdx, setEditIdx] = useState(null);
     const [adding, setAdding]   = useState(false);
     const [draft, setDraft]     = useState(null);
+    const [dragIdx, setDragIdx] = useState(null);
+    const [overIdx, setOverIdx] = useState(null);
 
     function startEdit(i) { setAdding(false); setEditIdx(i); setDraft({ ...items[i] }); }
     function startAdd()   { setEditIdx(null); setAdding(true); setDraft({ ...emptyItem }); }
@@ -52,13 +54,28 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
         onDirty?.();
     }
 
+    function onDrop(i) {
+        if (dragIdx === null || dragIdx === i) { setDragIdx(null); setOverIdx(null); return; }
+        setItems(prev => {
+            const next = [...prev];
+            const [moved] = next.splice(dragIdx, 1);
+            next.splice(i, 0, moved);
+            return next;
+        });
+        onDirty?.();
+        setDragIdx(null); setOverIdx(null);
+    }
+
     return (
         <div className="space-y-3">
-            {/* Existing items */}
             {items.map((item, i) => (
-                <div key={i}>
+                <div key={i}
+                    className={`transition-all duration-150 rounded-xl
+                        ${dragIdx === i ? 'opacity-40 scale-[0.98]' : ''}
+                        ${overIdx === i && dragIdx !== i ? 'ring-2 ring-accent/60' : ''}
+                    `}>
                     {editIdx === i ? (
-                        <div className="bg-white/8 border border-accent/30 rounded-xl p-4 space-y-3">
+                        <div className="bg-white/[0.08] border border-accent/30 rounded-xl p-4 space-y-3">
                             <p className="text-accent text-xs font-semibold uppercase tracking-wide mb-2">Editing</p>
                             {renderForm(draft, setDraft)}
                             <div className="flex gap-2 pt-1">
@@ -67,7 +84,13 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
                             </div>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                            draggable
+                            onDragStart={() => setDragIdx(i)}
+                            onDragOver={e => { e.preventDefault(); setOverIdx(i); }}
+                            onDrop={() => onDrop(i)}
+                            onDragEnd={() => { setDragIdx(null); setOverIdx(null); }}>
+                            <i className="bi bi-grip-vertical text-white/20 text-lg cursor-grab active:cursor-grabbing flex-shrink-0" />
                             <div className="flex-1 min-w-0">{renderDisplay(item)}</div>
                             <button onClick={() => startEdit(i)} className={editCls}>Edit</button>
                             <button onClick={() => remove(i)} className={dangerCls}>Delete</button>
@@ -76,9 +99,8 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
                 </div>
             ))}
 
-            {/* Add form */}
             {adding ? (
-                <div className="bg-white/8 border border-accent/30 rounded-xl p-4 space-y-3">
+                <div className="bg-white/[0.08] border border-accent/30 rounded-xl p-4 space-y-3">
                     <p className="text-accent text-xs font-semibold uppercase tracking-wide mb-2">New Item</p>
                     {renderForm(draft, setDraft)}
                     <div className="flex gap-2 pt-1">

@@ -17,11 +17,10 @@ class AdminProjectController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'      => 'required|string|max:255',
-            'tech'       => 'required|string|max:255',
-            'tag'        => 'required|string|max:50',
-            'image'      => 'required|image|max:4096',
-            'sort_order' => 'nullable|integer',
+            'title' => 'required|string|max:255',
+            'tech'  => 'required|string|max:255',
+            'tag'   => 'required|string|max:50',
+            'image' => 'required|image|max:4096',
         ]);
 
         $file = $request->file('image');
@@ -33,7 +32,7 @@ class AdminProjectController extends Controller
             'tech'       => $data['tech'],
             'tag'        => $data['tag'],
             'image'      => '/images/' . $filename,
-            'sort_order' => $data['sort_order'] ?? (Project::max('sort_order') + 1),
+            'sort_order' => (Project::max('sort_order') ?? 0) + 1,
         ]);
 
         return back()->with('success', 'Project added.');
@@ -42,11 +41,10 @@ class AdminProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $data = $request->validate([
-            'title'      => 'required|string|max:255',
-            'tech'       => 'required|string|max:255',
-            'tag'        => 'required|string|max:50',
-            'image'      => 'nullable|image|max:4096',
-            'sort_order' => 'nullable|integer',
+            'title' => 'required|string|max:255',
+            'tech'  => 'required|string|max:255',
+            'tag'   => 'required|string|max:50',
+            'image' => 'nullable|image|max:4096',
         ]);
 
         if ($request->hasFile('image')) {
@@ -61,6 +59,16 @@ class AdminProjectController extends Controller
         $project->update($data);
 
         return back()->with('success', 'Project updated.');
+    }
+
+    public function reorder(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $total = count($ids);
+        foreach ($ids as $position => $id) {
+            Project::where('id', $id)->update(['sort_order' => $total - $position]);
+        }
+        return back();
     }
 
     public function destroy(Project $project)
