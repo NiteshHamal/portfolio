@@ -20,14 +20,39 @@ function ProjectForm({ project, onCancel }) {
         demo_url:    project?.demo_url    ?? '',
         featured:    project?.featured    ?? false,
     });
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview]             = useState(null);
+    const [shotPreviews, setShotPreviews]   = useState([]);
+    const [shotFiles, setShotFiles]         = useState([]);
+    const [existingShots, setExistingShots] = useState(project?.screenshots ?? []);
 
-    useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
+    useEffect(() => () => {
+        if (preview) URL.revokeObjectURL(preview);
+        shotPreviews.forEach(u => URL.revokeObjectURL(u));
+    }, []);
 
     function handleImage(file) {
         setData('image', file);
         if (preview) URL.revokeObjectURL(preview);
         setPreview(file ? URL.createObjectURL(file) : null);
+    }
+
+    function handleScreenshots(files) {
+        const arr = Array.from(files);
+        setShotFiles(prev => [...prev, ...arr]);
+        setShotPreviews(prev => [...prev, ...arr.map(f => URL.createObjectURL(f))]);
+    }
+
+    function removeNewShot(idx) {
+        URL.revokeObjectURL(shotPreviews[idx]);
+        setShotPreviews(prev => prev.filter((_, i) => i !== idx));
+        setShotFiles(prev => prev.filter((_, i) => i !== idx));
+    }
+
+    function removeExistingShot(url) {
+        router.post(`/admin/projects/${project.id}/remove-screenshot`, { url }, {
+            preserveScroll: true,
+            onSuccess: () => setExistingShots(prev => prev.filter(s => s !== url)),
+        });
     }
 
     function submit(e) {
@@ -41,6 +66,7 @@ function ProjectForm({ project, onCancel }) {
         form.append('demo_url',    data.demo_url    ?? '');
         form.append('featured',    data.featured ? '1' : '0');
         if (data.image) form.append('image', data.image);
+        shotFiles.forEach(f => form.append('screenshots[]', f));
 
         const url = isEdit ? `/admin/projects/${project.id}` : '/admin/projects';
         router.post(url, form, {
@@ -108,10 +134,10 @@ function ProjectForm({ project, onCancel }) {
                 </div>
             </div>
 
-            {/* Row 4 — Image */}
+            {/* Row 4 — Cover Image */}
             <div>
                 <label className="text-white/50 text-xs mb-1 block">
-                    Image {isEdit && <span className="text-white/25">(leave empty to keep current)</span>} *
+                    Cover Image {isEdit && <span className="text-white/25">(leave empty to keep current)</span>} *
                 </label>
                 {displayImage && (
                     <div className="relative mb-2">
@@ -125,7 +151,51 @@ function ProjectForm({ project, onCancel }) {
                 {errors.image && <p className="text-red-400 text-xs mt-1">{errors.image}</p>}
             </div>
 
-            {/* Row 5 — Description */}
+            {/* Row 5 — Screenshots */}
+            <div>
+                <label className="text-white/50 text-xs mb-2 block">Screenshots Gallery <span className="text-white/25">(multiple allowed)</span></label>
+
+                {/* Existing screenshots */}
+                {existingShots.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                        {existingShots.map(url => (
+                            <div key={url} className="relative group">
+                                <img src={url} alt="" className="w-full h-24 object-cover rounded-lg" />
+                                <button type="button" onClick={() => removeExistingShot(url)}
+                                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 text-red-400
+                                               flex items-center justify-center text-xs opacity-0 group-hover:opacity-100
+                                               transition-opacity hover:bg-red-500 hover:text-white">
+                                    <i className="bi bi-x" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* New shot previews */}
+                {shotPreviews.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                        {shotPreviews.map((url, i) => (
+                            <div key={url} className="relative group">
+                                <img src={url} alt="" className="w-full h-24 object-cover rounded-lg opacity-80" />
+                                <span className="absolute top-1 left-1 bg-accent text-white text-[10px] px-1.5 py-0.5 rounded font-semibold">New</span>
+                                <button type="button" onClick={() => removeNewShot(i)}
+                                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 text-red-400
+                                               flex items-center justify-center text-xs opacity-0 group-hover:opacity-100
+                                               transition-opacity hover:bg-red-500 hover:text-white">
+                                    <i className="bi bi-x" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <input type="file" accept="image/*" multiple onChange={e => handleScreenshots(e.target.files)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/70 text-sm
+                               file:mr-3 file:bg-white/10 file:text-white/70 file:border-0 file:rounded file:px-3 file:py-1 file:text-xs" />
+            </div>
+
+            {/* Row 6 — Description */}
             <div>
                 <label className="text-white/50 text-xs mb-1 block">Description</label>
                 <RichEditor value={data.description} onChange={v => setData('description', v)}

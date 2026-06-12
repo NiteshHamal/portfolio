@@ -34,6 +34,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/projects/reorder', [AdminProjectController::class, 'reorder']);
     Route::post('/projects', [AdminProjectController::class, 'store']);
     Route::post('/projects/{project}', [AdminProjectController::class, 'update']);
+    Route::post('/projects/{project}/remove-screenshot', [AdminProjectController::class, 'removeScreenshot']);
     Route::delete('/projects/{project}', [AdminProjectController::class, 'destroy']);
 
     Route::get('/settings', [AdminSettingController::class, 'index']);

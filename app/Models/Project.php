@@ -8,8 +8,11 @@ class Project extends Model
 {
     protected $fillable = [
         'title', 'slug', 'tech', 'tag', 'image',
-        'description', 'github_url', 'demo_url', 'featured', 'sort_order',
+        'description', 'github_url', 'demo_url', 'featured', 'sort_order', 'screenshots',
     ];
 
-    protected $casts = ['featured' => 'boolean'];
+    protected $casts = [
+        'featured'    => 'boolean',
+        'screenshots' => 'array',
+    ];
 }
