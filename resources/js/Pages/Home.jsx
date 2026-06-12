@@ -25,7 +25,7 @@ export default function Home({ projects = [], settings = {} }) {
             </Head>
             <Navbar />
             <main>
-                <Hero     data={settings.hero} />
+                <Hero     data={settings.hero} photo={settings.about?.photo} />
                 <About    data={settings.about} skills={settings.skills} stats={settings.stats} />
                 <Resume   data={settings.resume} />
                 <Services data={settings.services} />
