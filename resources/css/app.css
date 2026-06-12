@@ -91,6 +91,14 @@
 /* ─── Typed cursor colour ────────────────────────────────── */
 .typed-cursor { color: #18d26e; }
 
+/* ─── Gradient section headings ─────────────────────────── */
+.heading-gradient {
+    background: linear-gradient(100deg, #ffffff 30%, #18d26e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 /* ─── Grain / noise texture ─────────────────────────────── */
 /* background-image stacks over background-color — no conflict with Tailwind bg-* */
 .section-noise {

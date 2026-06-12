@@ -7,6 +7,7 @@ import Services from '../Components/Services';
 import PortfolioSection from '../Components/Portfolio';
 import Contact from '../Components/Contact';
 import Footer from '../Components/Footer';
+import BackToTop from '../Components/BackToTop';
 
 export default function Home({ projects = [], settings = {} }) {
     const seo = settings.seo ?? {};
@@ -33,6 +34,7 @@ export default function Home({ projects = [], settings = {} }) {
                 <Contact  data={settings.contact} />
             </main>
             <Footer hero={settings.hero} contact={settings.contact} />
+            <BackToTop />
         </>
     );
 }

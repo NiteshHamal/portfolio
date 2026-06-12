@@ -4,28 +4,15 @@ import { motion } from 'framer-motion';
 
 export default function Contact({ data = {} }) {
     const {
-        address   = '',
-        email     = '',
-        phone     = '',
-        github    = '',
-        facebook  = '',
-        instagram = '',
-        youtube   = '',
-        linkedin  = '',
+        address = '',
+        email   = '',
+        phone   = '',
     } = data;
 
     const info = [
         address && { icon: 'bi-geo-alt',   label: 'Address', value: address },
         email   && { icon: 'bi-envelope',  label: 'Email',   value: email },
         phone   && { icon: 'bi-telephone', label: 'Phone',   value: phone },
-    ].filter(Boolean);
-
-    const socials = [
-        github    && { href: github,    icon: 'bi-github' },
-        facebook  && { href: facebook,  icon: 'bi-facebook' },
-        instagram && { href: instagram, icon: 'bi-instagram' },
-        youtube   && { href: youtube,   icon: 'bi-youtube' },
-        linkedin  && { href: linkedin,  icon: 'bi-linkedin' },
     ].filter(Boolean);
 
     const [sent, setSent] = useState(false);
@@ -47,7 +34,7 @@ export default function Contact({ data = {} }) {
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
                     <span className="text-accent text-sm font-display tracking-[4px] uppercase">Get In Touch</span>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display text-white mt-3">Contact Me</h2>
+                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient mt-3">Contact Me</h2>
                     <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
                 </motion.div>
 
@@ -68,16 +55,6 @@ export default function Contact({ data = {} }) {
                                 </div>
                             ))}
                         </div>
-                        {socials.length > 0 && (
-                            <div className="flex gap-4">
-                                {socials.map(({ href, icon }) => (
-                                    <a key={icon} href={href} target="_blank" rel="noopener noreferrer"
-                                        className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent flex items-center justify-center text-white transition-all duration-300 hover:scale-110">
-                                        <i className={`bi ${icon} text-sm`} />
-                                    </a>
-                                ))}
-                            </div>
-                        )}
                     </motion.div>
 
                     <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
