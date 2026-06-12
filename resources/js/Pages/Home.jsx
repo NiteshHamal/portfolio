@@ -5,9 +5,13 @@ import About from '../Components/About';
 import Resume from '../Components/Resume';
 import Services from '../Components/Services';
 import PortfolioSection from '../Components/Portfolio';
+import Process from '../Components/Process';
 import Contact from '../Components/Contact';
 import Footer from '../Components/Footer';
 import BackToTop from '../Components/BackToTop';
+import ScrollProgress from '../Components/ScrollProgress';
+import Preloader from '../Components/Preloader';
+import SectionDots from '../Components/SectionDots';
 
 export default function Home({ projects = [], settings = {} }) {
     const seo = settings.seo ?? {};
@@ -24,16 +28,20 @@ export default function Home({ projects = [], settings = {} }) {
                 <meta head-key="og:description" property="og:description" content={desc} />
                 {seo.og_image && <meta head-key="og:image" property="og:image" content={seo.og_image} />}
             </Head>
+            <Preloader />
+            <ScrollProgress />
             <Navbar />
             <main>
                 <Hero     data={settings.hero} photo={settings.about?.photo} />
                 <About    data={settings.about} skills={settings.skills} stats={settings.stats} />
                 <Resume   data={settings.resume} />
                 <Services data={settings.services} />
+                <Process />
                 <PortfolioSection projects={projects} />
                 <Contact  data={settings.contact} />
             </main>
             <Footer hero={settings.hero} contact={settings.contact} />
+            <SectionDots />
             <BackToTop />
         </>
     );
