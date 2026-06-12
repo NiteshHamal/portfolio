@@ -29,10 +29,16 @@ export default function Navbar() {
         return () => { document.body.style.overflow = ''; };
     }, [open]);
 
+    const isHome = typeof window !== 'undefined' && window.location.pathname === '/';
+
     const scrollTo = (id) => {
-        document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
-        setActive(id);
         setOpen(false);
+        if (isHome) {
+            document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+            setActive(id);
+        } else {
+            window.location.href = `/#${id.toLowerCase()}`;
+        }
     };
 
     return (
