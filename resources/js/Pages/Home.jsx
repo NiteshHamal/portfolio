@@ -32,7 +32,7 @@ export default function Home({ projects = [], settings = {} }) {
                 <PortfolioSection projects={projects} />
                 <Contact  data={settings.contact} />
             </main>
-            <Footer />
+            <Footer hero={settings.hero} contact={settings.contact} />
         </>
     );
 }

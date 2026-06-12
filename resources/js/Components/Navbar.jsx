@@ -56,6 +56,17 @@ export default function Navbar() {
                     ))}
                 </ul>
 
+                {/* Hire Me CTA — desktop */}
+                <button
+                    onClick={() => scrollTo('contact')}
+                    className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full
+                               border border-accent text-accent text-sm font-semibold font-display
+                               hover:bg-accent hover:text-white transition-all duration-300
+                               hover:shadow-lg hover:shadow-accent/30">
+                    Hire Me
+                    <i className="bi bi-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+
                 {/* Mobile toggle */}
                 <button className="md:hidden text-white text-2xl" onClick={() => setOpen(!open)}>
                     {open ? '✕' : '☰'}
@@ -74,6 +85,13 @@ export default function Navbar() {
                             {link}
                         </button>
                     ))}
+                    <button
+                        onClick={() => scrollTo('contact')}
+                        className="mt-5 w-full py-3 rounded-full border border-accent text-accent
+                                   text-sm font-semibold font-display hover:bg-accent hover:text-white
+                                   transition-all duration-300">
+                        Hire Me
+                    </button>
                 </div>
             )}
         </nav>
