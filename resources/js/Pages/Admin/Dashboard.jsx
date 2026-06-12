@@ -76,14 +76,16 @@ export default function Dashboard({ stats = {}, sections = {} }) {
 
                     {/* Stats row */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                        <StatCard icon="bi-folder2"        value={stats.project_count ?? 0}  label="Projects"          sub={stats.last_project ? `Last edited ${stats.last_project}` : null} />
-                        <StatCard icon="bi-sliders"        value={stats.settings_count ?? 0} label="Content Sections"  sub={stats.last_setting  ? `Last saved ${stats.last_setting}`  : null} />
-                        <StatCard icon="bi-eye"            value="Live"                       label="Portfolio Status"  sub="Public & visible" />
-                        <StatCard icon="bi-shield-check"   value="Secure"                     label="Admin Access"      sub="Password protected" />
+                        <StatCard icon="bi-folder2"      value={stats.project_count ?? 0}   label="Projects"         sub={stats.last_project ? `Last edited ${stats.last_project}` : null} />
+                        <StatCard icon="bi-sliders"      value={stats.settings_count ?? 0}  label="Content Sections" sub={stats.last_setting  ? `Last saved ${stats.last_setting}`  : null} />
+                        <a href="/admin/messages" className="block">
+                            <StatCard icon="bi-envelope" value={stats.unread_messages ?? 0} label="Unread Messages"  sub={stats.unread_messages > 0 ? 'Click to view' : 'All caught up'} />
+                        </a>
+                        <StatCard icon="bi-shield-check" value="Secure"                     label="Admin Access"     sub="Password protected" />
                     </div>
 
                     {/* Quick actions */}
-                    <div className="flex gap-3 mb-10">
+                    <div className="flex gap-3 flex-wrap mb-10">
                         <a href="/admin/projects"
                             className="bg-accent text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition flex items-center gap-2">
                             <i className="bi bi-folder2-open" /> Manage Projects
@@ -91,6 +93,17 @@ export default function Dashboard({ stats = {}, sections = {} }) {
                         <a href="/admin/settings"
                             className="bg-white/10 text-white/70 px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-white/20 transition flex items-center gap-2">
                             <i className="bi bi-sliders" /> Edit Content
+                        </a>
+                        <a href="/admin/messages"
+                            className="bg-white/10 text-white/70 px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-white/20 transition flex items-center gap-2">
+                            <i className="bi bi-envelope" /> Inbox
+                            {(stats.unread_messages ?? 0) > 0 && (
+                                <span className="bg-accent text-white text-xs px-1.5 py-0.5 rounded-full">{stats.unread_messages}</span>
+                            )}
+                        </a>
+                        <a href="/admin/change-password"
+                            className="bg-white/10 text-white/70 px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-white/20 transition flex items-center gap-2">
+                            <i className="bi bi-key" /> Change Password
                         </a>
                     </div>
 

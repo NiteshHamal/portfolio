@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactMessage;
 use App\Models\Project;
 use App\Models\Setting;
 
@@ -23,6 +24,7 @@ class AdminController extends Controller
             'stats' => [
                 'project_count'   => $projectCount,
                 'settings_count'  => $settingsCount,
+                'unread_messages' => ContactMessage::whereNull('read_at')->count(),
                 'last_project'    => $latestProject?->updated_at->diffForHumans(),
                 'last_setting'    => $latestSetting?->updated_at?->diffForHumans(),
             ],

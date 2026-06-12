@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 export default function Contact({ data = {} }) {
@@ -25,6 +27,19 @@ export default function Contact({ data = {} }) {
         youtube   && { href: youtube,   icon: 'bi-youtube' },
         linkedin  && { href: linkedin,  icon: 'bi-linkedin' },
     ].filter(Boolean);
+
+    const [sent, setSent] = useState(false);
+    const { data: form, setData, post, processing, errors, reset } = useForm({
+        name: '', email: '', subject: '', message: '',
+    });
+
+    function submit(e) {
+        e.preventDefault();
+        post('/contact', {
+            preserveScroll: true,
+            onSuccess: () => { reset(); setSent(true); },
+        });
+    }
 
     return (
         <section id="contact" className="py-24 bg-dark">
@@ -67,19 +82,47 @@ export default function Contact({ data = {} }) {
 
                     <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                        <form action={`https://formsubmit.co/${email}`} method="POST" className="space-y-5">
-                            <input type="hidden" name="_subject" value="New Portfolio Contact" />
-                            <input type="hidden" name="_captcha" value="false" />
-                            <div className="grid grid-cols-2 gap-5">
-                                <input name="name" type="text" placeholder="Your Name" required autoComplete="name" className="form-input" />
-                                <input name="email" type="email" placeholder="Your Email" required autoComplete="email" className="form-input" />
+                        {sent ? (
+                            <div className="h-full flex flex-col items-center justify-center text-center py-16 gap-4">
+                                <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
+                                    <i className="bi bi-check-lg text-accent text-3xl" />
+                                </div>
+                                <h4 className="text-white font-bold font-display text-xl">Message Sent!</h4>
+                                <p className="text-white/50 text-sm">I'll get back to you as soon as possible.</p>
+                                <button onClick={() => setSent(false)}
+                                    className="text-accent text-sm hover:underline mt-2">
+                                    Send another message
+                                </button>
                             </div>
-                            <input name="subject" type="text" placeholder="Subject" required className="form-input w-full" />
-                            <textarea name="message" rows={5} placeholder="Your Message" required className="form-input w-full resize-none" />
-                            <button type="submit" className="btn-primary w-full">
-                                Send Message <i className="bi bi-send ml-2" />
-                            </button>
-                        </form>
+                        ) : (
+                            <form onSubmit={submit} className="space-y-5">
+                                <div className="grid grid-cols-2 gap-5">
+                                    <div>
+                                        <input value={form.name} onChange={e => setData('name', e.target.value)}
+                                            type="text" placeholder="Your Name" required autoComplete="name" className="form-input w-full" />
+                                        {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+                                    </div>
+                                    <div>
+                                        <input value={form.email} onChange={e => setData('email', e.target.value)}
+                                            type="email" placeholder="Your Email" required autoComplete="email" className="form-input w-full" />
+                                        {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+                                    </div>
+                                </div>
+                                <div>
+                                    <input value={form.subject} onChange={e => setData('subject', e.target.value)}
+                                        type="text" placeholder="Subject" required className="form-input w-full" />
+                                    {errors.subject && <p className="text-red-400 text-xs mt-1">{errors.subject}</p>}
+                                </div>
+                                <div>
+                                    <textarea value={form.message} onChange={e => setData('message', e.target.value)}
+                                        rows={5} placeholder="Your Message" required className="form-input w-full resize-none" />
+                                    {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
+                                </div>
+                                <button type="submit" disabled={processing} className="btn-primary w-full disabled:opacity-60">
+                                    {processing ? 'Sending…' : <>Send Message <i className="bi bi-send ml-2" /></>}
+                                </button>
+                            </form>
+                        )}
                     </motion.div>
                 </div>
             </div>
