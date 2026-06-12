@@ -8,10 +8,10 @@ export default function PortfolioSection({ projects = [] }) {
     const filtered = active === 'all' ? projects : projects.filter(p => p.tag === active);
 
     return (
-        <section id="portfolio" className="py-24 bg-[#080808]">
+        <section id="portfolio" className="py-24 bg-[#080808] section-noise">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
+                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
                     <span className="text-accent text-sm font-display tracking-[4px] uppercase">My Work</span>
                     <h2 className="text-4xl md:text-5xl font-bold font-display text-white mt-3">Portfolio</h2>
                     <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />

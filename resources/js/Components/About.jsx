@@ -1,31 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-function SkillBar({ name, val }) {
-    const barRef = useRef(null);
-    useEffect(() => {
-        const obs = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting && barRef.current) {
-                barRef.current.style.width = val + '%';
-                obs.disconnect();
-            }
-        }, { threshold: 0.3 });
-        if (barRef.current) obs.observe(barRef.current.parentElement);
-        return () => obs.disconnect();
-    }, [val]);
-
-    return (
-        <div className="mb-4">
-            <div className="flex justify-between mb-1">
-                <span className="text-white/80 text-xs font-display font-semibold uppercase tracking-wider">{name}</span>
-                <span className="text-accent text-xs font-bold">{val}%</span>
-            </div>
-            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div ref={barRef} className="h-full bg-accent rounded-full transition-all duration-1000 ease-out skill-bar-glow" style={{ width: 0 }} />
-            </div>
-        </div>
-    );
-}
 
 function CountUp({ target, duration = 1800 }) {
     const [count, setCount] = useState(0);
@@ -86,10 +61,10 @@ export default function About({ data = {}, skills = [], stats = [] }) {
     ].filter(([, v]) => v);
 
     return (
-        <section id="about" className="py-24 bg-dark">
+        <section id="about" className="py-24 bg-dark section-noise">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
+                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
                     <span className="text-accent text-sm font-display tracking-[4px] uppercase">Who I Am</span>
                     <h2 className="text-4xl md:text-5xl font-bold font-display text-white mt-3">About Me</h2>
                     <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
@@ -133,10 +108,72 @@ export default function About({ data = {}, skills = [], stats = [] }) {
                 {skills.length > 0 && (
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-20">
-                        <h3 className="text-2xl font-bold font-display text-white mb-8 text-center">My Skills</h3>
-                        <div className="grid md:grid-cols-2 gap-x-16">
-                            {skills.map(s => <SkillBar key={s.name} {...s} />)}
-                        </div>
+                        <h3 className="text-2xl font-bold font-display text-white mb-10 text-center">My Skills</h3>
+                        <motion.div
+                            className="grid grid-cols-2 md:grid-cols-3 gap-4"
+                            variants={{ show: { transition: { staggerChildren: 0.07 } } }}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{ once: true }}>
+                            {[...skills]
+                                .sort((a, b) => b.val - a.val)
+                                .map(({ name, val }) => {
+                                    const isCore = val >= 75;
+                                    const dots   = Math.round(val / 20);
+                                    const initial = name.charAt(0).toUpperCase();
+                                    return (
+                                        <motion.div key={name}
+                                            variants={{
+                                                hidden: { opacity: 0, y: 24, scale: 0.92 },
+                                                show:   { opacity: 1, y: 0,  scale: 1    },
+                                            }}
+                                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                                            className={`group relative rounded-2xl p-5 overflow-hidden
+                                                        cursor-default select-none border
+                                                        transition-all duration-300
+                                                        hover:scale-[1.03] hover:shadow-xl
+                                                        ${isCore
+                                                            ? 'bg-accent/[0.04] border-accent/20 hover:border-accent/50 hover:bg-accent/[0.08] hover:shadow-accent/10'
+                                                            : 'bg-white/[0.03] border-white/[0.07] hover:border-white/20 hover:bg-white/[0.06] hover:shadow-white/5'
+                                                        }`}>
+
+                                            {/* Top accent bar */}
+                                            <div className={`absolute top-0 inset-x-0 h-[2px] rounded-t-2xl
+                                                ${isCore
+                                                    ? 'bg-gradient-to-r from-transparent via-accent to-transparent'
+                                                    : 'bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+                                                }`} />
+
+                                            {/* Faint letter watermark */}
+                                            <span className="absolute -bottom-3 -right-1 text-[4.5rem] font-bold font-display
+                                                             leading-none pointer-events-none select-none
+                                                             text-white/[0.04] group-hover:text-accent/[0.09]
+                                                             transition-colors duration-500">
+                                                {initial}
+                                            </span>
+
+                                            {/* Content */}
+                                            <div className="relative z-10">
+                                                <p className={`text-sm font-display font-semibold text-center mb-4
+                                                               transition-colors duration-300
+                                                               ${isCore ? 'text-white/90 group-hover:text-accent' : 'text-white/55 group-hover:text-white/85'}`}>
+                                                    {name}
+                                                </p>
+                                                <div className="flex justify-center gap-1.5">
+                                                    {Array.from({ length: 5 }, (_, i) => (
+                                                        <div key={i}
+                                                            className={`w-1.5 h-1.5 rounded-full transition-colors duration-300
+                                                                ${i < dots
+                                                                    ? isCore ? 'bg-accent' : 'bg-white/45'
+                                                                    : 'bg-white/10'
+                                                                }`} />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                        </motion.div>
                     </motion.div>
                 )}
 
