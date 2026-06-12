@@ -91,6 +91,37 @@
 /* ─── Typed cursor colour ────────────────────────────────── */
 .typed-cursor { color: #18d26e; }
 
+/* ─── Rich text editor (TipTap / admin) ─────────────────── */
+.rich-editor-content {
+    outline: none;
+    padding: 10px 14px;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+    font-family: 'Open Sans', sans-serif;
+}
+.rich-editor-content p          { margin-bottom: 0.4rem; }
+.rich-editor-content p:last-child { margin-bottom: 0; }
+.rich-editor-content strong     { color: #fff; font-weight: 600; }
+.rich-editor-content em         { color: rgba(255,255,255,0.65); }
+.rich-editor-content a          { color: #18d26e; text-decoration: underline; }
+/* Placeholder */
+.rich-editor-content p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: rgba(255, 255, 255, 0.22);
+    pointer-events: none;
+    float: left;
+    height: 0;
+}
+
+/* ─── Rendered rich text (public site) ──────────────────── */
+.prose-bio p          { margin-bottom: 0.35rem; }
+.prose-bio p:last-child { margin-bottom: 0; }
+.prose-bio strong     { color: rgba(255,255,255,0.9); font-weight: 600; }
+.prose-bio em         { font-style: italic; }
+.prose-bio a          { color: #18d26e; text-decoration: underline; }
+.prose-bio a:hover    { color: #35e888; }
+
 /* ─── Gradient section headings ─────────────────────────── */
 .heading-gradient {
     background: linear-gradient(100deg, #ffffff 30%, #18d26e 100%);

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { router, Head } from '@inertiajs/react';
 import Toast from '../../Components/Admin/Toast';
 import ConfirmModal from '../../Components/Admin/ConfirmModal';
+import RichEditor from '../../Components/Admin/RichEditor';
 
 const TABS = ['Hero', 'About', 'Skills', 'Stats', 'Resume', 'Services', 'Contact', 'SEO'];
 
@@ -179,8 +180,8 @@ function AboutTab({ init, onDirty }) {
         <div className="space-y-5">
             <p className="text-accent text-xs font-semibold uppercase tracking-wide">Editing About Section</p>
             <Field label="Role / Subtitle"><input value={d.subtitle ?? ''} onChange={e => setF('subtitle', e.target.value)} className={inputCls} /></Field>
-            <Field label="Bio Paragraph 1"><textarea rows={3} value={d.bio1 ?? ''} onChange={e => setF('bio1', e.target.value)} className={`${inputCls} resize-none`} /></Field>
-            <Field label="Bio Paragraph 2"><textarea rows={3} value={d.bio2 ?? ''} onChange={e => setF('bio2', e.target.value)} className={`${inputCls} resize-none`} /></Field>
+            <Field label="Bio Paragraph 1"><RichEditor value={d.bio1 ?? ''} onChange={v => setF('bio1', v)} placeholder="Write your intro bio…" minRows={3} /></Field>
+            <Field label="Bio Paragraph 2"><RichEditor value={d.bio2 ?? ''} onChange={v => setF('bio2', v)} placeholder="Write your main bio…" minRows={3} /></Field>
 
             <div className="grid grid-cols-2 gap-4">
                 {[['Birthday','birthday'],['Age','age'],['Website','website'],['Degree','degree'],['Phone','phone'],['Email','email'],['City','city'],['Freelance','freelance']].map(([lbl, key]) => (
@@ -395,7 +396,7 @@ function ServicesTab({ init, onDirty }) {
                     </div>
                     <div>
                         <label className="text-white/40 text-xs mb-1 block">Description</label>
-                        <textarea rows={2} value={draft.desc ?? ''} onChange={e => setDraft(p => ({ ...p, desc: e.target.value }))} className={`${inputCls} resize-none w-full`} />
+                        <RichEditor value={draft.desc ?? ''} onChange={v => setDraft(p => ({ ...p, desc: v }))} placeholder="Describe this service…" minRows={2} />
                     </div>
                 </div>
             )}

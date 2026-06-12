@@ -34,7 +34,7 @@ function ServiceCard({ icon, title, desc, delay, index }) {
                     <div className="absolute inset-0 rounded-xl bg-accent/20 blur-md -z-10 group-hover:blur-xl transition-all duration-300" />
                 </div>
                 <h4 className="text-xl font-bold font-display text-white mb-4 group-hover:text-accent transition-colors duration-300">{title}</h4>
-                <p className="text-white/50 text-sm leading-relaxed">{desc}</p>
+                <div className="text-white/50 text-sm leading-relaxed prose-bio" dangerouslySetInnerHTML={{ __html: desc }} />
             </div>
         </motion.div>
     );

@@ -90,10 +90,10 @@ export default function PortfolioSection({ projects = [] }) {
                 <motion.div layout className="grid md:grid-cols-3 gap-8">
                     <AnimatePresence>
                         {filtered.map((project) => {
-                            const { id, title, tech, image, link } = project;
-                            const Tag = link ? motion.a : motion.div;
-                            const tagProps = link
-                                ? { href: link, target: '_blank', rel: 'noopener noreferrer' }
+                            const { id, title, tech, image, slug, demo_url, github_url, featured } = project;
+                            const Tag = slug ? motion.a : motion.div;
+                            const tagProps = slug
+                                ? { href: `/projects/${slug}` }
                                 : { onClick: () => setLightbox(project), role: 'button', tabIndex: 0 };
 
                             return (
@@ -109,9 +109,41 @@ export default function PortfolioSection({ projects = [] }) {
                                     <img src={image} alt={title} loading="lazy"
                                         className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-105" />
 
+                                    {/* Featured badge */}
+                                    {featured && (
+                                        <span className="absolute top-3 left-3 z-10 bg-accent text-white
+                                                         text-[10px] font-bold uppercase tracking-widest
+                                                         px-2.5 py-1 rounded-full shadow-lg shadow-accent/30">
+                                            Featured
+                                        </span>
+                                    )}
+
                                     {/* Hover gradient */}
                                     <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/80
                                                     opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                    {/* GitHub + Demo quick links on hover */}
+                                    <div className="absolute top-3 right-3 flex gap-2 z-10
+                                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        {github_url && (
+                                            <a href={github_url} target="_blank" rel="noopener noreferrer"
+                                                onClick={e => e.stopPropagation()}
+                                                className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/20
+                                                           flex items-center justify-center text-white text-xs
+                                                           hover:bg-white hover:text-black hover:border-white transition-all duration-200">
+                                                <i className="bi bi-github" />
+                                            </a>
+                                        )}
+                                        {demo_url && (
+                                            <a href={demo_url} target="_blank" rel="noopener noreferrer"
+                                                onClick={e => e.stopPropagation()}
+                                                className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/20
+                                                           flex items-center justify-center text-white text-xs
+                                                           hover:bg-accent hover:border-accent transition-all duration-200">
+                                                <i className="bi bi-box-arrow-up-right" />
+                                            </a>
+                                        )}
+                                    </div>
 
                                     {/* Tech pills */}
                                     <div className="absolute inset-x-0 bottom-14 flex flex-wrap justify-center gap-1.5 px-4
@@ -136,8 +168,8 @@ export default function PortfolioSection({ projects = [] }) {
                                         <span className="flex items-center gap-1 text-accent text-xs font-display font-semibold
                                                          shrink-0 opacity-70 group-hover:opacity-100
                                                          group-hover:gap-1.5 transition-all duration-300">
-                                            {link ? 'Visit' : 'View'}
-                                            <i className={`bi ${link ? 'bi-arrow-up-right' : 'bi-arrows-fullscreen'} text-[11px]`} />
+                                            {slug ? 'Details' : 'View'}
+                                            <i className={`bi ${slug ? 'bi-arrow-right' : 'bi-arrows-fullscreen'} text-[11px]`} />
                                         </span>
                                     </div>
                                 </Tag>

@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/projects/{project:slug}', [AdminProjectController::class, 'show']);
 
 // Auth
 Route::get('/admin/login', [LoginController::class, 'showLogin'])->name('login');
