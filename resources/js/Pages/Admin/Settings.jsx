@@ -130,8 +130,18 @@ function HeroTab({ init, onDirty }) {
 function AboutTab({ init, onDirty }) {
     const [d, setD] = useState(init ?? {});
     const [photo, setPhoto] = useState(null);
+    const [photoPreview, setPhotoPreview] = useState(null);
     const [cv, setCv] = useState(null);
     const setF = (k, v) => { setD(p => ({ ...p, [k]: v })); onDirty?.(); };
+
+    useEffect(() => () => { if (photoPreview) URL.revokeObjectURL(photoPreview); }, [photoPreview]);
+
+    function handlePhoto(file) {
+        setPhoto(file);
+        if (photoPreview) URL.revokeObjectURL(photoPreview);
+        setPhotoPreview(file ? URL.createObjectURL(file) : null);
+        onDirty?.();
+    }
 
     return (
         <div className="space-y-5">
@@ -147,8 +157,21 @@ function AboutTab({ init, onDirty }) {
             </div>
 
             <Field label="Profile Photo">
-                {d.photo && <img src={d.photo} alt="Profile" className="w-20 h-20 rounded-full object-cover mb-2" />}
-                <input type="file" accept="image/*" onChange={e => { setPhoto(e.target.files[0]); onDirty?.(); }}
+                <div className="flex items-center gap-4 mb-3">
+                    {photoPreview
+                        ? <div className="relative">
+                            <img src={photoPreview} alt="Preview" className="w-20 h-20 rounded-full object-cover ring-2 ring-accent" />
+                            <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] px-1.5 py-0.5 rounded-full font-semibold">New</span>
+                          </div>
+                        : d.photo && <img src={d.photo} alt="Profile" className="w-20 h-20 rounded-full object-cover ring-2 ring-white/10" />
+                    }
+                    {(photoPreview || d.photo) && (
+                        <p className="text-white/40 text-xs">
+                            {photoPreview ? 'Preview — save to apply' : 'Current photo'}
+                        </p>
+                    )}
+                </div>
+                <input type="file" accept="image/*" onChange={e => handlePhoto(e.target.files[0])}
                     className={`${inputCls} file:mr-3 file:bg-accent file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:text-xs`} />
             </Field>
 

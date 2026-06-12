@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, router, Head } from '@inertiajs/react';
 import Toast from '../../Components/Admin/Toast';
 
@@ -13,6 +13,15 @@ function ProjectForm({ project, onCancel }) {
         sort_order: project?.sort_order ?? '',
         image: null,
     });
+    const [preview, setPreview] = useState(null);
+
+    useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
+
+    function handleImage(file) {
+        setData('image', file);
+        if (preview) URL.revokeObjectURL(preview);
+        setPreview(file ? URL.createObjectURL(file) : null);
+    }
 
     function submit(e) {
         e.preventDefault();
@@ -29,6 +38,8 @@ function ProjectForm({ project, onCancel }) {
             onSuccess: () => { reset(); onCancel(); },
         });
     }
+
+    const displayImage = preview ?? (isEdit ? project.image : null);
 
     return (
         <form onSubmit={submit} className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
@@ -63,7 +74,18 @@ function ProjectForm({ project, onCancel }) {
                     <label className="text-white/60 text-sm block mb-1">
                         Image {isEdit && <span className="text-white/30">(leave empty to keep current)</span>}
                     </label>
-                    <input type="file" accept="image/*" onChange={e => setData('image', e.target.files[0])}
+                    {displayImage && (
+                        <div className="relative mb-2">
+                            <img src={displayImage} alt="Preview"
+                                className="w-full h-44 object-cover rounded-lg" />
+                            {preview && (
+                                <span className="absolute top-2 left-2 bg-accent text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                                    New
+                                </span>
+                            )}
+                        </div>
+                    )}
+                    <input type="file" accept="image/*" onChange={e => handleImage(e.target.files[0])}
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/70 text-sm file:mr-3 file:bg-accent file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:text-xs" />
                     {errors.image && <p className="text-red-400 text-xs mt-1">{errors.image}</p>}
                 </div>
