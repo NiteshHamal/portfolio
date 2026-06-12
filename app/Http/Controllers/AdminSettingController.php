@@ -32,6 +32,13 @@ class AdminSettingController extends Controller
             $value['cv_url'] = '/' . $filename;
         }
 
+        if ($key === 'seo' && $request->hasFile('og_image')) {
+            $file = $request->file('og_image');
+            $filename = 'og_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $value['og_image'] = '/images/' . $filename;
+        }
+
         Setting::set($key, $value);
 
         return back()->with('success', ucfirst($key) . ' settings saved.');

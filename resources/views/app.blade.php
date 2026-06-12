@@ -3,9 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Nitesh Hamal - Backend Developer from Nepal specializing in Laravel and full-stack development.">
-    <meta property="og:title" content="Nitesh Hamal - Backend Developer">
-    <meta property="og:type" content="website">
     <title inertia>{{ config('app.name', 'Nitesh Hamal') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

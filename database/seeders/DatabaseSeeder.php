@@ -102,6 +102,11 @@ class DatabaseSeeder extends Seeder
                 ['icon' => 'bi-server',            'title' => 'Backend Development',  'desc' => 'I harness the power of Laravel to create robust backend solutions — REST APIs, authentication, queues, and more.'],
                 ['icon' => 'bi-phone',             'title' => 'Android Development',  'desc' => 'I leverage Flutter to deliver seamless and dynamic cross-platform mobile applications for Android.'],
             ],
+            'seo' => [
+                'title'       => 'Nitesh Hamal — Backend Developer from Nepal',
+                'description' => 'Crafting efficient, scalable web applications with clean code and modern technologies. Laravel developer and full-stack web developer based in Kathmandu, Nepal.',
+                'og_image'    => null,
+            ],
             'contact' => [
                 'address'   => 'New Baneshwor, Kathmandu, Nepal',
                 'email'     => 'nitesh0hamal@gmail.com',

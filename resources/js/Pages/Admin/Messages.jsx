@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { router, Head } from '@inertiajs/react';
 import Toast from '../../Components/Admin/Toast';
+import ConfirmModal from '../../Components/Admin/ConfirmModal';
 
 function MessageRow({ msg, onDelete }) {
     const [open, setOpen] = useState(false);
@@ -50,19 +51,24 @@ function MessageRow({ msg, onDelete }) {
 }
 
 export default function AdminMessages({ messages = [], unread = 0 }) {
-    const [filter, setFilter] = useState('all');
+    const [filter, setFilter]         = useState('all');
+    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const shown = filter === 'unread' ? messages.filter(m => !m.read_at) : messages;
 
-    function deleteMsg(id) {
-        if (!confirm('Delete this message?')) return;
-        router.delete(`/admin/messages/${id}`, { preserveScroll: true });
-    }
+    function deleteMsg(id) { setConfirmDelete(id); }
 
     return (
         <>
             <Head title="Inbox" />
             <Toast />
+            <ConfirmModal
+                open={confirmDelete !== null}
+                title="Delete Message"
+                message="This message will be permanently deleted."
+                onConfirm={() => { router.delete(`/admin/messages/${confirmDelete}`, { preserveScroll: true }); setConfirmDelete(null); }}
+                onCancel={() => setConfirmDelete(null)}
+            />
             <div className="min-h-screen bg-[#080808] text-white px-6 py-10">
                 <div className="max-w-4xl mx-auto">
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { router, Head } from '@inertiajs/react';
 import Toast from '../../Components/Admin/Toast';
+import ConfirmModal from '../../Components/Admin/ConfirmModal';
 
-const TABS = ['Hero', 'About', 'Skills', 'Stats', 'Resume', 'Services', 'Contact'];
+const TABS = ['Hero', 'About', 'Skills', 'Stats', 'Resume', 'Services', 'Contact', 'SEO'];
 
 function Field({ label, children }) {
     return (
@@ -28,11 +29,12 @@ function save(key, value, files = {}) {
 
 // ── Shared: list manager with display + inline edit + drag-to-reorder ─────────
 function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, saveKey, saveItems, noSave, onDirty }) {
-    const [editIdx, setEditIdx] = useState(null);
-    const [adding, setAdding]   = useState(false);
-    const [draft, setDraft]     = useState(null);
-    const [dragIdx, setDragIdx] = useState(null);
-    const [overIdx, setOverIdx] = useState(null);
+    const [editIdx, setEditIdx]       = useState(null);
+    const [adding, setAdding]         = useState(false);
+    const [draft, setDraft]           = useState(null);
+    const [dragIdx, setDragIdx]       = useState(null);
+    const [overIdx, setOverIdx]       = useState(null);
+    const [confirmIdx, setConfirmIdx] = useState(null);
 
     function startEdit(i) { setAdding(false); setEditIdx(i); setDraft({ ...items[i] }); }
     function startAdd()   { setEditIdx(null); setAdding(true); setDraft({ ...emptyItem }); }
@@ -52,6 +54,7 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
         setItems(p => p.filter((_, idx) => idx !== i));
         if (editIdx === i) { setEditIdx(null); setDraft(null); }
         onDirty?.();
+        setConfirmIdx(null);
     }
 
     function onDrop(i) {
@@ -68,6 +71,13 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
 
     return (
         <div className="space-y-3">
+            <ConfirmModal
+                open={confirmIdx !== null}
+                title="Delete Item"
+                message="This item will be permanently removed from the list."
+                onConfirm={() => remove(confirmIdx)}
+                onCancel={() => setConfirmIdx(null)}
+            />
             {items.map((item, i) => (
                 <div key={i}
                     className={`transition-all duration-150 rounded-xl
@@ -93,7 +103,7 @@ function ListManager({ items, setItems, renderDisplay, renderForm, emptyItem, sa
                             <i className="bi bi-grip-vertical text-white/20 text-lg cursor-grab active:cursor-grabbing flex-shrink-0" />
                             <div className="flex-1 min-w-0">{renderDisplay(item)}</div>
                             <button onClick={() => startEdit(i)} className={editCls}>Edit</button>
-                            <button onClick={() => remove(i)} className={dangerCls}>Delete</button>
+                            <button onClick={() => setConfirmIdx(i)} className={dangerCls}>Delete</button>
                         </div>
                     )}
                 </div>
@@ -417,31 +427,90 @@ function ContactTab({ init, onDirty }) {
     );
 }
 
+// ── SEO ───────────────────────────────────────────────────────────────────────
+function SeoTab({ init, onDirty }) {
+    const [d, setD] = useState(init ?? {});
+    const [ogImage, setOgImage] = useState(null);
+    const [ogPreview, setOgPreview] = useState(null);
+    const setF = (k, v) => { setD(p => ({ ...p, [k]: v })); onDirty?.(); };
+
+    useEffect(() => () => { if (ogPreview) URL.revokeObjectURL(ogPreview); }, [ogPreview]);
+
+    function handleOgImage(file) {
+        setOgImage(file);
+        if (ogPreview) URL.revokeObjectURL(ogPreview);
+        setOgPreview(file ? URL.createObjectURL(file) : null);
+        onDirty?.();
+    }
+
+    const displayOg = ogPreview ?? d.og_image ?? null;
+    const descLen   = d.description?.length ?? 0;
+
+    return (
+        <div className="space-y-5">
+            <p className="text-accent text-xs font-semibold uppercase tracking-wide">Editing SEO / Meta</p>
+
+            <Field label="Page Title">
+                <input value={d.title ?? ''} onChange={e => setF('title', e.target.value)}
+                    className={inputCls} placeholder="Nitesh Hamal — Backend Developer from Nepal" />
+                <p className="text-white/30 text-xs mt-1">Appears in browser tab and Google search results</p>
+            </Field>
+
+            <Field label="Meta Description">
+                <textarea rows={3} value={d.description ?? ''} onChange={e => setF('description', e.target.value)}
+                    className={`${inputCls} resize-none`} placeholder="~160 characters describing your portfolio" />
+                <p className={`text-xs mt-1 ${descLen > 160 ? 'text-red-400' : 'text-white/30'}`}>
+                    {descLen}/160 characters
+                </p>
+            </Field>
+
+            <Field label="OG Image — Social Share Preview">
+                {displayOg && (
+                    <div className="relative mb-2">
+                        <img src={displayOg} alt="OG preview" className="w-full h-40 object-cover rounded-lg" />
+                        <span className="absolute bottom-2 left-2 bg-black/60 text-white/60 text-xs px-2 py-1 rounded">
+                            1200 × 630 px recommended
+                        </span>
+                        {ogPreview && (
+                            <span className="absolute top-2 left-2 bg-accent text-white text-xs px-2 py-0.5 rounded-full font-semibold">New</span>
+                        )}
+                    </div>
+                )}
+                <input type="file" accept="image/*" onChange={e => handleOgImage(e.target.files[0])}
+                    className={`${inputCls} file:mr-3 file:bg-accent file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:text-xs`} />
+                <p className="text-white/30 text-xs mt-1">Shown when your portfolio link is shared on social media</p>
+            </Field>
+
+            <button className={btnCls} onClick={() => save('seo', d, { og_image: ogImage })}>Save SEO</button>
+        </div>
+    );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminSettings({ settings = {} }) {
-    const [tab, setTab]         = useState('Hero');
-    const [isDirty, setIsDirty] = useState(false);
+    const [tab, setTab]                     = useState('Hero');
+    const [isDirty, setIsDirty]             = useState(false);
+    const [resetKeys, setResetKeys]         = useState({});
+    const [pendingTab, setPendingTab]       = useState(null);
+    const [confirmReset, setConfirmReset]   = useState(false);
     const markDirty = () => setIsDirty(true);
 
-    // Warn on browser refresh / close
     useEffect(() => {
         const handler = (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } };
         window.addEventListener('beforeunload', handler);
         return () => window.removeEventListener('beforeunload', handler);
     }, [isDirty]);
 
-    // Clear dirty after any successful save (POST completes)
     useEffect(() => {
         return router.on('success', () => setIsDirty(false));
     }, []);
 
-    // Warn on Inertia GET navigation away from this page
     useEffect(() => {
         return router.on('before', (e) => {
             const visit = e.detail.visit;
-            if (visit.method !== 'get') return; // save POSTs — let through
+            if (visit.method !== 'get') return;
             const path = typeof visit.url === 'string' ? visit.url : visit.url?.pathname ?? '';
-            if (path.includes('/admin/settings')) return; // redirect back after save — let through
+            if (path.includes('/admin/settings')) return;
             if (isDirty && !window.confirm('You have unsaved changes. Leave anyway?')) {
                 e.preventDefault();
                 return false;
@@ -452,25 +521,57 @@ export default function AdminSettings({ settings = {} }) {
 
     function handleTabChange(newTab) {
         if (newTab === tab) return;
-        if (isDirty && !window.confirm('You have unsaved changes on this tab. Leave anyway?')) return;
-        setIsDirty(false);
+        if (isDirty) { setPendingTab(newTab); return; }
         setTab(newTab);
     }
 
+    function doTabSwitch() {
+        setIsDirty(false);
+        setTab(pendingTab);
+        setPendingTab(null);
+    }
+
+    function handleReset() {
+        setResetKeys(prev => ({ ...prev, [tab]: (prev[tab] ?? 0) + 1 }));
+        setIsDirty(false);
+        setConfirmReset(false);
+    }
+
+    const rk = (t) => `${t}-${resetKeys[t] ?? 0}`;
+
     const tabContent = {
-        Hero:     <HeroTab     init={settings.hero}     onDirty={markDirty} />,
-        About:    <AboutTab    init={settings.about}    onDirty={markDirty} />,
-        Skills:   <SkillsTab   init={settings.skills}   onDirty={markDirty} />,
-        Stats:    <StatsTab    init={settings.stats}    onDirty={markDirty} />,
-        Resume:   <ResumeTab   init={settings.resume}   onDirty={markDirty} />,
-        Services: <ServicesTab init={settings.services} onDirty={markDirty} />,
-        Contact:  <ContactTab  init={settings.contact}  onDirty={markDirty} />,
+        Hero:     <HeroTab     key={rk('Hero')}     init={settings.hero}     onDirty={markDirty} />,
+        About:    <AboutTab    key={rk('About')}    init={settings.about}    onDirty={markDirty} />,
+        Skills:   <SkillsTab   key={rk('Skills')}   init={settings.skills}   onDirty={markDirty} />,
+        Stats:    <StatsTab    key={rk('Stats')}    init={settings.stats}    onDirty={markDirty} />,
+        Resume:   <ResumeTab   key={rk('Resume')}   init={settings.resume}   onDirty={markDirty} />,
+        Services: <ServicesTab key={rk('Services')} init={settings.services} onDirty={markDirty} />,
+        Contact:  <ContactTab  key={rk('Contact')}  init={settings.contact}  onDirty={markDirty} />,
+        SEO:      <SeoTab      key={rk('SEO')}      init={settings.seo}      onDirty={markDirty} />,
     };
 
     return (
         <>
             <Head title="Settings" />
             <Toast />
+            <ConfirmModal
+                open={pendingTab !== null}
+                title="Unsaved Changes"
+                message={`You have unsaved changes on the ${tab} tab. Leave without saving?`}
+                confirmLabel="Leave"
+                confirmCls="bg-white/20 text-white hover:bg-white/30 transition"
+                onConfirm={doTabSwitch}
+                onCancel={() => setPendingTab(null)}
+            />
+            <ConfirmModal
+                open={confirmReset}
+                title="Reset Changes"
+                message={`Discard all unsaved edits on the ${tab} tab and restore the last saved state?`}
+                confirmLabel="Reset"
+                confirmCls="bg-yellow-500 text-[#080808] hover:bg-yellow-400 transition font-semibold"
+                onConfirm={handleReset}
+                onCancel={() => setConfirmReset(false)}
+            />
             <div className="min-h-screen bg-[#080808] text-white px-6 py-10">
                 <div className="max-w-5xl mx-auto">
                     <div className="flex items-center justify-between mb-8">
@@ -489,7 +590,7 @@ export default function AdminSettings({ settings = {} }) {
                         </div>
                     </div>
 
-                    <div className="flex gap-2 flex-wrap mb-8">
+                    <div className="flex gap-2 flex-wrap items-center mb-8">
                         {TABS.map(t => (
                             <button key={t} onClick={() => handleTabChange(t)}
                                 className={`relative px-5 py-2 rounded-full text-sm font-semibold transition-all ${
@@ -501,6 +602,12 @@ export default function AdminSettings({ settings = {} }) {
                                 )}
                             </button>
                         ))}
+                        {isDirty && (
+                            <button onClick={() => setConfirmReset(true)}
+                                className="ml-auto flex items-center gap-1.5 text-yellow-400/60 hover:text-yellow-400 text-xs transition">
+                                <i className="bi bi-arrow-counterclockwise" /> Reset changes
+                            </button>
+                        )}
                     </div>
 
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, router, Head } from '@inertiajs/react';
 import Toast from '../../Components/Admin/Toast';
+import ConfirmModal from '../../Components/Admin/ConfirmModal';
 
 const TAGS = ['website', 'webapp', 'backend', 'app'];
 
@@ -96,19 +97,17 @@ function ProjectForm({ project, onCancel }) {
 }
 
 export default function AdminProjects({ projects = [] }) {
-    const [list, setList]         = useState(projects);
+    const [list, setList]              = useState(projects);
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingId, setEditingId]    = useState(null);
     const [dragIdx, setDragIdx]        = useState(null);
     const [overIdx, setOverIdx]        = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(null); // project id
 
     // Sync list when Inertia reloads props (add / delete)
     useEffect(() => { setList(projects); }, [projects]);
 
-    function deleteProject(id) {
-        if (!confirm('Delete this project?')) return;
-        router.delete(`/admin/projects/${id}`);
-    }
+    function deleteProject(id) { setConfirmDelete(id); }
 
     function onDragStart(i) { setDragIdx(i); }
     function onDragOver(e, i) { e.preventDefault(); setOverIdx(i); }
@@ -131,6 +130,13 @@ export default function AdminProjects({ projects = [] }) {
         <>
             <Head title="Manage Projects" />
             <Toast />
+            <ConfirmModal
+                open={confirmDelete !== null}
+                title="Delete Project"
+                message="This project will be permanently removed from your portfolio."
+                onConfirm={() => { router.delete(`/admin/projects/${confirmDelete}`); setConfirmDelete(null); }}
+                onCancel={() => setConfirmDelete(null)}
+            />
             <div className="min-h-screen bg-[#080808] text-white px-6 py-10">
                 <div className="max-w-5xl mx-auto">
 
