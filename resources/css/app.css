@@ -1,0 +1,103 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────── */
+@layer base {
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        background-color: #040404;
+        color: #ffffff;
+        font-family: 'Open Sans', sans-serif;
+        cursor: none;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #040404; }
+    ::-webkit-scrollbar-thumb { background: #18d26e; border-radius: 10px; }
+    ::selection { background: #18d26e33; color: #18d26e; }
+}
+
+/* ─── Custom Cursor ─────────────────────────────────────── */
+.cursor-dot {
+    position: fixed;
+    top: -6px; left: -6px;
+    width: 12px; height: 12px;
+    background: #18d26e;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform;
+}
+.cursor-ring {
+    position: fixed;
+    top: -20px; left: -20px;
+    width: 40px; height: 40px;
+    border: 2px solid rgba(24,210,110,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    will-change: transform;
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+.cursor-ring.cursor-hover {
+    width: 60px; height: 60px;
+    top: -30px; left: -30px;
+    border-color: #18d26e;
+    background: rgba(24,210,110,0.05);
+}
+
+/* ─── Components ─────────────────────────────────────────── */
+@layer components {
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-8 py-3 rounded-full
+               bg-accent text-white font-display font-semibold text-sm
+               tracking-wide uppercase transition-all duration-300
+               hover:bg-accent-light hover:shadow-lg hover:shadow-accent/30
+               hover:-translate-y-0.5 active:translate-y-0;
+    }
+    .btn-outline {
+        @apply inline-flex items-center justify-center px-8 py-3 rounded-full
+               border-2 border-white/30 text-white font-display font-semibold
+               text-sm tracking-wide uppercase transition-all duration-300
+               hover:border-accent hover:text-accent hover:-translate-y-0.5
+               active:translate-y-0;
+    }
+    .card-glass {
+        @apply bg-white/5 border border-white/10 rounded-xl
+               backdrop-blur-sm transition-all duration-300
+               hover:bg-white/[0.08] hover:border-accent/30;
+    }
+    .form-input {
+        @apply bg-white/5 border border-white/10 rounded-lg px-4 py-3
+               text-white placeholder-white/30 text-sm font-sans
+               focus:outline-none focus:border-accent transition-colors duration-200;
+    }
+    .section-tag {
+        @apply text-accent text-sm font-display tracking-[4px] uppercase;
+    }
+}
+
+/* ─── Skill bar glow ─────────────────────────────────────── */
+.skill-bar-glow {
+    box-shadow: 0 0 8px rgba(24, 210, 110, 0.5);
+}
+
+/* ─── Scroll dot animation ───────────────────────────────── */
+@keyframes scroll-dot {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    80% { transform: translateY(12px); opacity: 0; }
+}
+.animate-scroll-dot {
+    animation: scroll-dot 1.8s ease-in-out infinite;
+}
+
+/* ─── Typed cursor colour ────────────────────────────────── */
+.typed-cursor { color: #18d26e; }
+
+/* ─── Toast animation ────────────────────────────────────── */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
