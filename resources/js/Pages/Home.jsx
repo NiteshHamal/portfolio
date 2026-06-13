@@ -7,13 +7,15 @@ import Services from '../Components/Services';
 import PortfolioSection from '../Components/Portfolio';
 import Process from '../Components/Process';
 import Contact from '../Components/Contact';
+import TechTicker from '../Components/TechTicker';
+import Testimonials from '../Components/Testimonials';
 import Footer from '../Components/Footer';
 import BackToTop from '../Components/BackToTop';
 import ScrollProgress from '../Components/ScrollProgress';
 import Preloader from '../Components/Preloader';
 import SectionDots from '../Components/SectionDots';
 
-export default function Home({ projects = [], settings = {} }) {
+export default function Home({ projects = [], settings = {}, testimonials = [] }) {
     const seo = settings.seo ?? {};
     const title = seo.title || 'Nitesh Hamal — Backend Developer from Nepal';
     const desc  = seo.description || 'Crafting efficient, scalable web applications with clean code and modern technologies from Kathmandu, Nepal.';
@@ -32,12 +34,14 @@ export default function Home({ projects = [], settings = {} }) {
             <ScrollProgress />
             <Navbar />
             <main>
-                <Hero     data={settings.hero} photo={settings.about?.photo} />
-                <About    data={settings.about} skills={settings.skills} stats={settings.stats} />
+                <Hero     data={settings.hero} />
+                <TechTicker />
+                <About    data={settings.about} skills={settings.skills} />
                 <Resume   data={settings.resume} />
                 <Services data={settings.services} />
                 <Process />
                 <PortfolioSection projects={projects} />
+                <Testimonials testimonials={testimonials} />
                 <Contact  data={settings.contact} />
             </main>
             <Footer hero={settings.hero} contact={settings.contact} />

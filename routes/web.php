@@ -5,16 +5,19 @@ use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\AdminPasswordController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminSettingController;
+use App\Http\Controllers\AdminTestimonialController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Models\Project;
 use App\Models\Setting;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return inertia('Home', [
-        'projects' => Project::orderByDesc('sort_order')->get(),
-        'settings' => Setting::all()->pluck('value', 'key'),
+        'projects'     => Project::orderByDesc('sort_order')->get(),
+        'settings'     => Setting::all()->pluck('value', 'key'),
+        'testimonials' => Testimonial::where('active', true)->orderBy('sort_order')->orderByDesc('id')->get(),
     ]);
 });
 
@@ -46,4 +49,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::get('/change-password', [AdminPasswordController::class, 'show']);
     Route::post('/change-password', [AdminPasswordController::class, 'update']);
+
+    Route::get('/testimonials', [AdminTestimonialController::class, 'index']);
+    Route::post('/testimonials', [AdminTestimonialController::class, 'store']);
+    Route::post('/testimonials/{testimonial}', [AdminTestimonialController::class, 'update']);
+    Route::delete('/testimonials/{testimonial}', [AdminTestimonialController::class, 'destroy']);
 });

@@ -101,6 +101,10 @@ export default function Dashboard({ stats = {}, sections = {} }) {
                                 <span className="bg-accent text-white text-xs px-1.5 py-0.5 rounded-full">{stats.unread_messages}</span>
                             )}
                         </a>
+                        <a href="/admin/testimonials"
+                            className="bg-white/10 text-white/70 px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-white/20 transition flex items-center gap-2">
+                            <i className="bi bi-chat-quote" /> Testimonials
+                        </a>
                         <a href="/admin/change-password"
                             className="bg-white/10 text-white/70 px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-white/20 transition flex items-center gap-2">
                             <i className="bi bi-key" /> Change Password
@@ -121,6 +125,20 @@ export default function Dashboard({ stats = {}, sections = {} }) {
                                 updatedAt={sections[key]?.updated_at}
                             />
                         ))}
+                        {/* Testimonials card */}
+                        <a href="/admin/testimonials"
+                            className="group bg-white/5 border border-white/10 rounded-xl p-5 hover:border-accent/40 hover:bg-white/[0.08] transition-all duration-200">
+                            <div className="flex items-start justify-between mb-3">
+                                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                                    <i className="bi bi-chat-quote text-accent" />
+                                </div>
+                                <span className="text-white/20 text-xs group-hover:text-accent/60 transition-colors">Manage →</span>
+                            </div>
+                            <p className="text-white font-semibold text-sm mb-1">Testimonials</p>
+                            <p className="text-white/40 text-xs leading-relaxed mb-3">Client quotes and star ratings for social proof</p>
+                            <p className="text-white/20 text-xs">{stats.testimonial_count ?? 0} testimonial{stats.testimonial_count !== 1 ? 's' : ''}</p>
+                        </a>
+
                         {/* Projects card */}
                         <a href="/admin/projects"
                             className="group bg-white/5 border border-white/10 rounded-xl p-5 hover:border-accent/40 hover:bg-white/[0.08] transition-all duration-200">

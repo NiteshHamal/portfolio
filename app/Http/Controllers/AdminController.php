@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ContactMessage;
 use App\Models\Project;
 use App\Models\Setting;
+use App\Models\Testimonial;
 
 class AdminController extends Controller
 {
@@ -22,11 +23,12 @@ class AdminController extends Controller
 
         return inertia('Admin/Dashboard', [
             'stats' => [
-                'project_count'   => $projectCount,
-                'settings_count'  => $settingsCount,
-                'unread_messages' => ContactMessage::whereNull('read_at')->count(),
-                'last_project'    => $latestProject?->updated_at->diffForHumans(),
-                'last_setting'    => $latestSetting?->updated_at?->diffForHumans(),
+                'project_count'     => $projectCount,
+                'settings_count'    => $settingsCount,
+                'unread_messages'   => ContactMessage::whereNull('read_at')->count(),
+                'testimonial_count' => Testimonial::count(),
+                'last_project'      => $latestProject?->updated_at->diffForHumans(),
+                'last_setting'      => $latestSetting?->updated_at?->diffForHumans(),
             ],
             'sections' => $sectionStats,
         ]);

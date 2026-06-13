@@ -1,38 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-
-function CountUp({ target, duration = 1800 }) {
-    const [count, setCount] = useState(0);
-    const ref   = useRef(null);
-    const fired = useRef(false);
-
-    useEffect(() => {
-        const obs = new IntersectionObserver(([entry]) => {
-            if (!entry.isIntersecting || fired.current) return;
-            fired.current = true;
-            obs.disconnect();
-
-            const start     = performance.now();
-            const tick = (now) => {
-                const elapsed = now - start;
-                const progress = Math.min(elapsed / duration, 1);
-                // ease-out cubic
-                const eased = 1 - Math.pow(1 - progress, 3);
-                setCount(Math.round(eased * target));
-                if (progress < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-        }, { threshold: 0.4 });
-
-        if (ref.current) obs.observe(ref.current);
-        return () => obs.disconnect();
-    }, [target, duration]);
-
-    return <span ref={ref}>{count}</span>;
-}
-
-export default function About({ data = {}, skills = [], stats = [] }) {
+export default function About({ data = {}, skills = [] }) {
     const {
         subtitle  = 'Web & Backend Developer',
         bio1      = '',
@@ -177,22 +146,6 @@ export default function About({ data = {}, skills = [], stats = [] }) {
                     </motion.div>
                 )}
 
-                {stats.length > 0 && (
-                    <div className="grid grid-cols-3 gap-6">
-                        {stats.map(({ icon, value, label }, i) => (
-                            <motion.div key={label}
-                                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}
-                                className="card-glass text-center py-10 relative">
-                                <i className={`bi ${icon} absolute -top-5 left-1/2 -translate-x-1/2 text-accent text-2xl bg-dark/80 p-3 rounded-full border border-white/10`} />
-                                <div className="text-4xl font-bold font-display text-white mt-4">
-                                    <CountUp target={parseInt(value) || 0} />+
-                                </div>
-                                <div className="text-white/50 text-sm mt-1 font-display">{label}</div>
-                            </motion.div>
-                        ))}
-                    </div>
-                )}
             </div>
         </section>
     );

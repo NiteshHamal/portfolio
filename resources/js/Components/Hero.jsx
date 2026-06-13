@@ -1,17 +1,145 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Typed from 'typed.js';
 import * as THREE from 'three';
 
-export default function Hero({ data = {}, photo = null }) {
+/* ── Syntax-highlighted code lines ── */
+const CODE_LINES = [
+    [{ t: '// developer.php',                    c: 'text-white/30' }],
+    [
+        { t: 'Route',    c: 'text-violet-400' },
+        { t: '::',       c: 'text-white/40'  },
+        { t: 'get',      c: 'text-blue-400'  },
+        { t: "('/api/me', ", c: 'text-white/50' },
+        { t: 'function', c: 'text-violet-400' },
+        { t: ' () {',    c: 'text-white/60'  },
+    ],
+    [
+        { t: '  return ', c: 'text-violet-400' },
+        { t: 'response',  c: 'text-blue-400'  },
+        { t: '()->',      c: 'text-white/40'  },
+        { t: 'json',      c: 'text-blue-400'  },
+        { t: '([',        c: 'text-white/60'  },
+    ],
+    [
+        { t: "    'name'",  c: 'text-sky-300'  },
+        { t: '     => ',    c: 'text-white/35' },
+        { t: "'Nitesh Hamal'", c: 'text-accent' },
+        { t: ',',           c: 'text-white/35' },
+    ],
+    [
+        { t: "    'role'",  c: 'text-sky-300'  },
+        { t: '     => ',    c: 'text-white/35' },
+        { t: "'Backend Developer'", c: 'text-accent' },
+        { t: ',',           c: 'text-white/35' },
+    ],
+    [
+        { t: "    'stack'", c: 'text-sky-300'  },
+        { t: '    => [',    c: 'text-white/35' },
+        { t: "'Laravel'",   c: 'text-amber-300' },
+        { t: ', ',          c: 'text-white/35' },
+        { t: "'MySQL'",     c: 'text-amber-300' },
+        { t: ', ',          c: 'text-white/35' },
+        { t: "'REST API'",  c: 'text-amber-300' },
+        { t: '],',          c: 'text-white/35' },
+    ],
+    [
+        { t: "    'location'", c: 'text-sky-300'  },
+        { t: ' => ',           c: 'text-white/35' },
+        { t: "'Kathmandu, NP'", c: 'text-accent'  },
+        { t: ',',              c: 'text-white/35' },
+    ],
+    [
+        { t: "    'available'", c: 'text-sky-300'   },
+        { t: ' => ',            c: 'text-white/35'  },
+        { t: 'true',            c: 'text-orange-300' },
+        { t: ',',               c: 'text-white/35'  },
+    ],
+    [
+        { t: "    'projects'",  c: 'text-sky-300'   },
+        { t: '  => ',           c: 'text-white/35'  },
+        { t: '10',              c: 'text-orange-300' },
+        { t: ',',               c: 'text-white/35'  },
+    ],
+    [{ t: '  ]);',  c: 'text-white/60' }],
+    [{ t: '});',    c: 'text-white/60' }],
+    [],
+    [
+        { t: '// ✓ ', c: 'text-white/30' },
+        { t: '200 OK', c: 'text-accent'  },
+        { t: '  ·  8ms', c: 'text-white/30' },
+    ],
+];
+
+function CodeWindow() {
+    const [visible, setVisible] = useState(0);
+
+    useEffect(() => {
+        const timers = CODE_LINES.map((_, i) =>
+            setTimeout(() => setVisible(i + 1), 400 + i * 130)
+        );
+        return () => timers.forEach(clearTimeout);
+    }, []);
+
+    return (
+        <div className="relative w-full max-w-[420px] rounded-xl overflow-hidden
+                        border border-white/10 shadow-2xl shadow-black/70
+                        bg-[#0d0d0d]">
+
+            {/* Title bar */}
+            <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.04] border-b border-white/[0.06]">
+                <span className="w-3 h-3 rounded-full bg-red-500/70" />
+                <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                <span className="w-3 h-3 rounded-full bg-green-500/70" />
+                <span className="ml-3 text-white/25 text-xs font-mono">developer.php</span>
+                <span className="ml-auto flex items-center gap-1.5 text-white/20 text-[10px] font-mono">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                    PHP
+                </span>
+            </div>
+
+            {/* Code body */}
+            <div className="px-4 py-4 font-mono text-[13px] leading-[1.75] min-h-[280px]">
+                {CODE_LINES.map((parts, lineIdx) => (
+                    <div key={lineIdx}
+                        className={`flex transition-all duration-300 ${
+                            lineIdx < visible
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-1'
+                        }`}>
+
+                        {/* Line number */}
+                        <span className="select-none text-white/15 text-[11px] w-6 shrink-0 pt-px">
+                            {lineIdx + 1}
+                        </span>
+
+                        {/* Code */}
+                        <span>
+                            {parts.map((part, pi) => (
+                                <span key={pi} className={part.c}>{part.t}</span>
+                            ))}
+                            {/* Blinking cursor on current line */}
+                            {lineIdx === visible - 1 && visible < CODE_LINES.length && (
+                                <span className="inline-block w-[2px] h-[14px] bg-accent ml-0.5
+                                                 align-middle animate-pulse" />
+                            )}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export default function Hero({ data = {} }) {
     const {
-        name           = 'Nitesh Hamal',
-        tagline        = 'Welcome to my portfolio',
-        description    = 'Crafting efficient, scalable web applications with clean code and modern technologies from Kathmandu, Nepal.',
-        typed_strings  = ['Backend Developer', 'Laravel Developer', 'Full Stack Developer', 'Freelancer'],
-        github         = '',
-        linkedin       = '',
-        youtube        = '',
+        name          = 'Nitesh Hamal',
+        tagline       = 'Welcome to my portfolio',
+        description   = 'Crafting efficient, scalable web applications with clean code and modern technologies from Kathmandu, Nepal.',
+        typed_strings = ['Backend Developer', 'Laravel Developer', 'Full Stack Developer', 'Freelancer'],
+        github        = '',
+        linkedin      = '',
+        youtube       = '',
     } = data;
 
     const typedEl     = useRef(null);
@@ -54,31 +182,28 @@ export default function Hero({ data = {}, photo = null }) {
     const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
     const socials = [
-        github   && { href: github,   icon: 'bi-github',   label: 'GitHub' },
+        github   && { href: github,   icon: 'bi-github',   label: 'GitHub'   },
         linkedin && { href: linkedin, icon: 'bi-linkedin', label: 'LinkedIn' },
-        youtube  && { href: youtube,  icon: 'bi-youtube',  label: 'YouTube' },
+        youtube  && { href: youtube,  icon: 'bi-youtube',  label: 'YouTube'  },
     ].filter(Boolean);
 
-    const nameParts  = name.trim().split(' ');
-    const firstName  = nameParts[0] ?? '';
-    const lastName   = nameParts.slice(1).join(' ');
+    const [firstName, ...rest] = name.trim().split(' ');
+    const lastName = rest.join(' ');
 
     return (
         <section id="home" ref={vantaRef}
             className="relative min-h-screen flex items-center overflow-hidden">
 
-            {/* ── Content grid ─────────────────────────────────── */}
             <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-28
                             grid lg:grid-cols-2 gap-14 items-center">
 
-                {/* ── LEFT: text ───────────────────────────────── */}
+                {/* ── LEFT: text ── */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
                     className="order-2 lg:order-1 text-center lg:text-left">
 
-                    {/* Availability pill */}
                     <motion.div
                         initial={{ opacity: 0, y: -12 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -94,7 +219,6 @@ export default function Hero({ data = {}, photo = null }) {
                         </span>
                     </motion.div>
 
-                    {/* Name */}
                     <h1 className="font-bold font-display leading-[1.05] mb-6">
                         <span className="block text-white/40 text-lg md:text-xl font-medium font-sans mb-1">
                             Hello, I'm
@@ -109,20 +233,16 @@ export default function Hero({ data = {}, photo = null }) {
                         )}
                     </h1>
 
-                    {/* Typed */}
                     <div className="text-lg md:text-xl text-white/60 font-sans mb-6
                                     flex items-center gap-2 justify-center lg:justify-start">
                         <span>I'm a passionate</span>
                         <span ref={typedEl} className="text-accent font-semibold" />
                     </div>
 
-                    {/* Description */}
-                    <p className="text-white/45 text-base leading-relaxed mb-10 max-w-md
-                                  mx-auto lg:mx-0">
+                    <p className="text-white/45 text-base leading-relaxed mb-10 max-w-md mx-auto lg:mx-0">
                         {description}
                     </p>
 
-                    {/* CTAs */}
                     <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-10">
                         <button onClick={() => scrollTo('contact')} className="btn-primary group">
                             Hire Me
@@ -133,7 +253,6 @@ export default function Hero({ data = {}, photo = null }) {
                         </button>
                     </div>
 
-                    {/* Socials */}
                     {socials.length > 0 && (
                         <div className="flex items-center gap-4 justify-center lg:justify-start">
                             <span className="text-white/20 text-[10px] uppercase tracking-[3px]">Follow</span>
@@ -154,53 +273,31 @@ export default function Hero({ data = {}, photo = null }) {
                     )}
                 </motion.div>
 
-                {/* ── RIGHT: photo ─────────────────────────────── */}
+                {/* ── RIGHT: code window ── */}
                 <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.15 }}
                     className="order-1 lg:order-2 flex items-center justify-center lg:justify-end">
 
-                    {/* Wrapper — all decorative elements are children so they overflow naturally */}
-                    <div className="relative mt-6">
+                    <div className="relative mt-6 w-full max-w-[420px]">
 
-                        {/* Ambient glow behind photo */}
-                        <div className="absolute -inset-10 bg-accent/[0.07] rounded-full blur-3xl pointer-events-none" />
+                        {/* Ambient glow */}
+                        <div className="absolute -inset-6 bg-accent/[0.06] rounded-3xl blur-3xl pointer-events-none" />
 
-                        {/* Decorative rotated cards */}
-                        <div className="absolute inset-0 rounded-2xl border border-accent/20 bg-accent/[0.04]"
-                             style={{ transform: 'rotate(-5deg) scale(1.06)' }} />
-                        <div className="absolute inset-0 rounded-2xl border border-white/[0.06] bg-transparent"
-                             style={{ transform: 'rotate(2.5deg) scale(1.03)' }} />
+                        {/* Corner brackets */}
+                        <div className="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 border-accent rounded-tl z-20 pointer-events-none" />
+                        <div className="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-accent rounded-tr z-20 pointer-events-none" />
+                        <div className="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-accent rounded-bl z-20 pointer-events-none" />
+                        <div className="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 border-accent rounded-br z-20 pointer-events-none" />
 
-                        {/* Photo */}
-                        <div className="relative w-64 md:w-72 lg:w-80 rounded-2xl overflow-hidden
-                                        border border-white/10 shadow-2xl shadow-black/60 z-10">
-                            {photo ? (
-                                <img src={photo} alt={name}
-                                    className="w-full aspect-[3/4] object-cover object-top" />
-                            ) : (
-                                <div className="w-full aspect-[3/4] bg-white/5 flex items-center justify-center">
-                                    <i className="bi bi-person text-white/10 text-8xl" />
-                                </div>
-                            )}
-                            {/* Bottom fade */}
-                            <div className="absolute inset-x-0 bottom-0 h-20
-                                            bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-                        </div>
+                        <CodeWindow />
 
-                        {/* Corner bracket accents */}
-                        <div className="absolute -top-3 -left-3 w-10 h-10 border-t-2 border-l-2 border-accent rounded-tl z-20" />
-                        <div className="absolute -top-3 -right-3 w-10 h-10 border-t-2 border-r-2 border-accent rounded-tr z-20" />
-                        <div className="absolute -bottom-3 -left-3 w-10 h-10 border-b-2 border-l-2 border-accent rounded-bl z-20" />
-                        <div className="absolute -bottom-3 -right-3 w-10 h-10 border-b-2 border-r-2 border-accent rounded-br z-20" />
-
-                        {/* Available for Work badge */}
-                        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-30
+                        {/* Available badge — bottom center */}
+                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-30
                                         bg-[#0c0c0c] border border-accent/30 rounded-full
                                         px-5 py-2.5 flex items-center gap-2.5
-                                        shadow-xl shadow-black/60 whitespace-nowrap
-                                        backdrop-blur-sm">
+                                        shadow-xl shadow-black/60 whitespace-nowrap backdrop-blur-sm">
                             <span className="relative flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
@@ -210,12 +307,12 @@ export default function Hero({ data = {}, photo = null }) {
                             </span>
                         </div>
 
-                        {/* Experience chip — top-right */}
+                        {/* Experience chip — top right */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.7, duration: 0.4 }}
-                            className="absolute -top-5 -right-7 z-30 bg-[#0c0c0c] border border-white/10
+                            className="absolute -top-5 -right-5 z-30 bg-[#0c0c0c] border border-white/10
                                        rounded-2xl px-4 py-3 shadow-xl shadow-black/60 text-center">
                             <div className="text-accent font-bold text-xl font-display leading-none">3+</div>
                             <div className="text-white/35 text-[10px] uppercase tracking-wider mt-1">Years Exp.</div>
