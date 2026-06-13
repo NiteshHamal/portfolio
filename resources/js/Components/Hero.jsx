@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Typed from 'typed.js';
-import * as THREE from 'three';
 
 /* ── Syntax-highlighted code lines ── */
 const CODE_LINES = [
@@ -82,15 +81,15 @@ function CodeWindow() {
     }, []);
 
     return (
-        <div className="relative w-full max-w-[420px] rounded-xl overflow-hidden
+        <div className="relative w-full max-w-[min(420px,100%)] rounded-xl overflow-hidden
                         border border-white/10 shadow-2xl shadow-black/70
                         bg-[#0d0d0d]">
 
             {/* Title bar */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.04] border-b border-white/[0.06]">
-                <span className="w-3 h-3 rounded-full bg-red-500/70" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                <span className="w-3 h-3 rounded-full bg-green-500/70" />
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-white/[0.04] border-b border-white/[0.06]">
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/70" />
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/70" />
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500/70" />
                 <span className="ml-3 text-white/25 text-xs font-mono">developer.php</span>
                 <span className="ml-auto flex items-center gap-1.5 text-white/20 text-[10px] font-mono">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -99,7 +98,7 @@ function CodeWindow() {
             </div>
 
             {/* Code body */}
-            <div className="px-4 py-4 font-mono text-[13px] leading-[1.75] min-h-[280px]">
+            <div className="px-3 sm:px-4 py-3 sm:py-4 font-mono text-[11px] sm:text-[13px] leading-[1.75] min-h-[280px]">
                 {CODE_LINES.map((parts, lineIdx) => (
                     <div key={lineIdx}
                         className={`flex transition-all duration-300 ${
@@ -158,11 +157,15 @@ export default function Hero({ data = {} }) {
 
     useEffect(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.matchMedia('(hover: none)').matches) return;
 
         let mounted = true;
-        import('vanta/dist/vanta.net.min').then((mod) => {
+        Promise.all([
+            import('three'),
+            import('vanta/dist/vanta.net.min'),
+        ]).then(([THREE, vantaMod]) => {
             if (!mounted || vantaEffect.current) return;
-            const VANTA = mod.default || mod;
+            const VANTA = vantaMod.default || vantaMod;
             vantaEffect.current = VANTA({
                 el: vantaRef.current,
                 THREE,
@@ -221,31 +224,31 @@ export default function Hero({ data = {} }) {
                         </span>
                     </motion.div>
 
-                    <h1 className="font-bold font-display leading-[1.05] mb-6">
-                        <span className="block text-white/40 text-lg md:text-xl font-medium font-sans mb-1">
+                    <h1 className="font-bold font-display leading-[1.05] mb-4 md:mb-6">
+                        <span className="block text-white/40 text-base md:text-xl font-medium font-sans mb-1">
                             Hello, I'm
                         </span>
-                        <span className="block text-5xl md:text-6xl xl:text-7xl text-white">
+                        <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-white">
                             {firstName}
                         </span>
                         {lastName && (
-                            <span className="block text-5xl md:text-6xl xl:text-7xl text-accent">
+                            <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-accent">
                                 {lastName}
                             </span>
                         )}
                     </h1>
 
-                    <div className="text-lg md:text-xl text-white/60 font-sans mb-6
+                    <div className="text-base md:text-xl text-white/60 font-sans mb-4 md:mb-6
                                     flex items-center gap-2 justify-center lg:justify-start">
                         <span>I'm a passionate</span>
                         <span ref={typedEl} className="text-accent font-semibold" />
                     </div>
 
-                    <p className="text-white/45 text-base leading-relaxed mb-10 max-w-md mx-auto lg:mx-0">
+                    <p className="text-white/45 text-sm md:text-base leading-relaxed mb-6 md:mb-10 max-w-md mx-auto lg:mx-0">
                         {description}
                     </p>
 
-                    <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-10">
+                    <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6 md:mb-10">
                         <button onClick={() => scrollTo('contact')} className="btn-primary group">
                             Hire Me
                             <i className="bi bi-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1" />

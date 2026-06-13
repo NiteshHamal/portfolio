@@ -31,6 +31,7 @@ function Lightbox({ project, onClose }) {
                            border border-white/10 shadow-2xl shadow-black/80">
 
                 <img src={project.image} alt={project.title}
+                    loading="lazy" decoding="async"
                     className="w-full object-cover block" />
 
                 {/* Title bar */}
