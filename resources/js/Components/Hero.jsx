@@ -157,6 +157,8 @@ export default function Hero({ data = {} }) {
     }, [typed_strings]);
 
     useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
         let mounted = true;
         import('vanta/dist/vanta.net.min').then((mod) => {
             if (!mounted || vantaEffect.current) return;

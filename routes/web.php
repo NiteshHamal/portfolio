@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OgImageController;
 use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\AdminPasswordController;
 use App\Http\Controllers\AdminProjectController;
@@ -22,6 +23,7 @@ Route::get('/', function () {
 });
 
 Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/og-image.png', OgImageController::class);
 Route::get('/projects/{project:slug}', [AdminProjectController::class, 'show']);
 
 // Auth

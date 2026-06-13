@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminSettingController extends Controller
 {
@@ -40,6 +41,11 @@ class AdminSettingController extends Controller
         }
 
         Setting::set($key, $value);
+
+        // Bust OG image cache when name, photo, or job title change
+        if (in_array($key, ['hero', 'about'])) {
+            Cache::forget('og_image_v1');
+        }
 
         return back()->with('success', ucfirst($key) . ' settings saved.');
     }
