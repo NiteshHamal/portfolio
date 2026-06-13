@@ -45,7 +45,7 @@ export default function Navbar() {
         <>
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled ? 'bg-black/90 backdrop-blur-sm shadow-lg' : 'bg-transparent'
-            }`}>
+            }`} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
                 <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                     <a onClick={() => scrollTo('home')} className="text-2xl font-bold font-display text-white cursor-pointer">
                         Nitesh<span className="text-accent">.</span>

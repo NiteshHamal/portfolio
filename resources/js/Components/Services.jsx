@@ -5,7 +5,7 @@ import VanillaTilt from 'vanilla-tilt';
 function ServiceCard({ icon, title, desc, delay, index }) {
     const cardRef = useRef(null);
     useEffect(() => {
-        if (cardRef.current) {
+        if (cardRef.current && !window.matchMedia('(hover: none)').matches) {
             VanillaTilt.init(cardRef.current, { max: 12, speed: 400, glare: true, 'max-glare': 0.15 });
         }
         return () => cardRef.current?.vanillaTilt?.destroy();
@@ -51,7 +51,7 @@ export default function Services({ data = [] }) {
                     <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
                 </motion.div>
 
-                <div className="grid md:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {data.map((s, i) => <ServiceCard key={i} {...s} index={i} delay={i * 0.15} />)}
                 </div>
             </div>

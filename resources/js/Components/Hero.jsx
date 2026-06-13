@@ -200,21 +200,21 @@ export default function Hero({ data = {} }) {
             className="relative min-h-screen flex items-center overflow-hidden">
 
             <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-28
-                            grid lg:grid-cols-2 gap-14 items-center">
+                            grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
                 {/* ── LEFT: text ── */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    className="order-2 lg:order-1 text-center lg:text-left">
+                    className="order-2 md:order-1 text-center md:text-left">
 
                     <motion.div
                         initial={{ opacity: 0, y: -12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.5 }}
                         className="inline-flex items-center gap-2.5 bg-accent/10 border border-accent/25
-                                   rounded-full px-4 py-1.5 mb-8 lg:mb-10">
+                                   rounded-full px-4 py-1.5 mb-8 md:mb-10">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
@@ -239,16 +239,16 @@ export default function Hero({ data = {} }) {
                     </h1>
 
                     <div className="text-base md:text-xl text-white/60 font-sans mb-4 md:mb-6
-                                    flex items-center gap-2 justify-center lg:justify-start">
+                                    flex items-center gap-2 justify-center md:justify-start">
                         <span>I'm a passionate</span>
                         <span ref={typedEl} className="text-accent font-semibold" />
                     </div>
 
-                    <p className="text-white/45 text-sm md:text-base leading-relaxed mb-6 md:mb-10 max-w-md mx-auto lg:mx-0">
+                    <p className="text-white/45 text-sm md:text-base leading-relaxed mb-6 md:mb-10 max-w-md mx-auto md:mx-0">
                         {description}
                     </p>
 
-                    <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6 md:mb-10">
+                    <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-6 md:mb-10">
                         <button onClick={() => scrollTo('contact')} className="btn-primary group">
                             Hire Me
                             <i className="bi bi-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1" />
@@ -259,7 +259,7 @@ export default function Hero({ data = {} }) {
                     </div>
 
                     {socials.length > 0 && (
-                        <div className="flex items-center gap-4 justify-center lg:justify-start">
+                        <div className="flex items-center gap-4 justify-center md:justify-start">
                             <span className="text-white/20 text-[10px] uppercase tracking-[3px]">Follow</span>
                             <div className="w-6 h-px bg-white/15" />
                             <div className="flex gap-3">
@@ -283,7 +283,7 @@ export default function Hero({ data = {} }) {
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.15 }}
-                    className="order-1 lg:order-2 flex items-center justify-center lg:justify-end">
+                    className="order-1 md:order-2 hidden md:flex items-center justify-center md:justify-end">
 
                     <div className="relative mt-6 w-full max-w-[420px]">
 

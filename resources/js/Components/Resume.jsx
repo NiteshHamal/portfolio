@@ -4,7 +4,7 @@ function TimelineItem({ title, period, place, points, delay, icon }) {
     return (
         <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.5, delay }}
-            className="relative pl-10 pb-8 border-l-2 border-white/10 last:border-transparent last:pb-0">
+            className="relative pl-8 md:pl-10 pb-8 border-l-2 border-white/10 last:border-transparent last:pb-0">
 
             {/* Icon dot */}
             <div className="absolute -left-[17px] top-0
@@ -44,7 +44,7 @@ export default function Resume({ data = {} }) {
                     <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-16">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                     <div>
                         <h3 className="text-xl font-bold font-display text-white mb-8 flex items-center gap-3">
                             <i className="bi bi-mortarboard text-accent" /> Education

@@ -25,7 +25,8 @@ export default function BackToTop() {
                     whileHover={{ scale: 1.12 }}
                     whileTap={{  scale: 0.92 }}
                     aria-label="Back to top"
-                    className="fixed bottom-8 right-8 z-50
+                    style={{ bottom: 'calc(2rem + env(safe-area-inset-bottom))', right: '2rem' }}
+                    className="fixed z-50
                                w-11 h-11 rounded-full
                                bg-accent text-white
                                flex items-center justify-center

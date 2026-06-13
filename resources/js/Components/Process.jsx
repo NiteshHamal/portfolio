@@ -54,7 +54,7 @@ export default function Process() {
                                 transition={{ duration: 0.55, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                                 className="group relative flex-1 rounded-2xl border border-white/[0.07]
                                            bg-white/[0.03] hover:bg-accent/[0.05] hover:border-accent/25
-                                           p-7 overflow-hidden cursor-default
+                                           p-5 md:p-7 overflow-hidden cursor-default
                                            transition-all duration-300 hover:shadow-xl hover:shadow-accent/8">
 
                                 {/* Faded number watermark */}
@@ -96,10 +96,11 @@ export default function Process() {
                                 </div>
                             </motion.div>
 
-                            {/* Connector arrow — between cards only */}
+                            {/* Connector — right arrow on desktop, down arrow on mobile */}
                             {i < STEPS.length - 1 && (
-                                <div className="hidden md:flex items-center justify-center shrink-0 text-white/15">
-                                    <i className="bi bi-chevron-right text-xl" />
+                                <div className="flex items-center justify-center shrink-0 text-white/20">
+                                    <i className="bi bi-chevron-down text-lg md:hidden" />
+                                    <i className="bi bi-chevron-right text-xl hidden md:block" />
                                 </div>
                             )}
                         </div>
