@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLenis } from '../hooks/useLenis';
 
 export default function BackToTop() {
     const [visible, setVisible] = useState(false);
+    const lenis = useLenis();
 
     useEffect(() => {
         const onScroll = () => setVisible(window.scrollY > 400);
@@ -10,7 +12,11 @@ export default function BackToTop() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollTop = () => {
+        lenis.current
+            ? lenis.current.scrollTo(0)
+            : window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
         <AnimatePresence>

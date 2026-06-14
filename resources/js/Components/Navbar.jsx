@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLenis } from '../hooks/useLenis';
 
 const links = ['Home','About','Resume','Services','Portfolio','Testimonials','Contact'];
 
@@ -29,12 +30,18 @@ export default function Navbar() {
         return () => { document.body.style.overflow = ''; };
     }, [open]);
 
+    const lenis = useLenis();
     const isHome = typeof window !== 'undefined' && window.location.pathname === '/';
 
     const scrollTo = (id) => {
         setOpen(false);
         if (isHome) {
-            document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+            const el = document.getElementById(id.toLowerCase());
+            if (el) {
+                lenis.current
+                    ? lenis.current.scrollTo(el, { offset: -80 })
+                    : el.scrollIntoView({ behavior: 'smooth' });
+            }
             setActive(id);
         } else {
             window.location.href = `/#${id.toLowerCase()}`;

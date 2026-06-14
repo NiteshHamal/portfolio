@@ -1,11 +1,13 @@
 import './bootstrap';
 import '../css/app.css';
-import { Component } from 'react';
+import { Component, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { MotionConfig } from 'framer-motion';
+import Lenis from '@studio-freight/lenis';
 import Cursor from './Components/Cursor';
+import { LenisContext } from './hooks/useLenis';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -39,6 +41,41 @@ class ErrorBoundary extends Component {
     }
 }
 
+function SmoothScroll({ children }) {
+    const lenisRef = useRef(null);
+
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const lenis = new Lenis({
+            lerp: 0.1,
+            smoothWheel: true,
+            smoothTouch: false,
+        });
+
+        lenisRef.current = lenis;
+
+        let rafId;
+        function tick(time) {
+            lenis.raf(time);
+            rafId = requestAnimationFrame(tick);
+        }
+        rafId = requestAnimationFrame(tick);
+
+        return () => {
+            cancelAnimationFrame(rafId);
+            lenis.destroy();
+            lenisRef.current = null;
+        };
+    }, []);
+
+    return (
+        <LenisContext.Provider value={lenisRef}>
+            {children}
+        </LenisContext.Provider>
+    );
+}
+
 createInertiaApp({
     title: (title) => `${title} — Nitesh Hamal`,
     resolve: (name) =>
@@ -46,10 +83,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <ErrorBoundary>
-                <MotionConfig reducedMotion="user">
-                    <Cursor />
-                    <App {...props} />
-                </MotionConfig>
+                <SmoothScroll>
+                    <MotionConfig reducedMotion="user">
+                        <Cursor />
+                        <App {...props} />
+                    </MotionConfig>
+                </SmoothScroll>
             </ErrorBoundary>
         );
     },

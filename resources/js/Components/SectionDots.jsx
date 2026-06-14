@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLenis } from '../hooks/useLenis';
 
 const sections = ['Home', 'About', 'Resume', 'Services', 'Portfolio', 'Testimonials', 'Contact'];
 
@@ -22,8 +23,14 @@ export default function SectionDots() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const scrollTo = (id) =>
-        document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+    const lenis = useLenis();
+    const scrollTo = (id) => {
+        const el = document.getElementById(id.toLowerCase());
+        if (!el) return;
+        lenis.current
+            ? lenis.current.scrollTo(el, { offset: -80 })
+            : el.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50
