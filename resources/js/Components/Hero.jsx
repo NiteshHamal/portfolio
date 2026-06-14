@@ -199,7 +199,7 @@ export default function Hero({ data = {} }) {
         <section id="home" ref={vantaRef}
             className="relative min-h-screen flex items-center overflow-hidden">
 
-            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-28
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-16 md:py-28
                             grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
                 {/* ── LEFT: text ── */}

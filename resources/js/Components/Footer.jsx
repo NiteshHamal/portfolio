@@ -36,7 +36,7 @@ export default function Footer({ hero = {}, contact = {} }) {
 
             {/* ── Main columns ─────────────────────────────── */}
             <div className="max-w-6xl mx-auto px-6 pt-16 pb-10
-                            grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                            grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-8">
 
                 {/* Col 1 — Brand */}
                 <div>
