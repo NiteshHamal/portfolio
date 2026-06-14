@@ -92,6 +92,32 @@
     animation-play-state: paused;
 }
 
+/* ─── Hero name animated gradient ───────────────────────── */
+@keyframes name-shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position:   0% center; }
+}
+.name-gradient {
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        #18d26e 28%,
+        #c8ffe8 50%,
+        #18d26e 72%,
+        rgba(255,255,255,0.95) 100%
+    );
+    background-size: 200% 100%;
+    background-repeat: repeat-x;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: name-shimmer 5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .name-gradient { animation: none; background-position: 0% center; }
+}
+
 /* ─── Scroll dot animation ───────────────────────────────── */
 @keyframes scroll-dot {
     0%, 100% { transform: translateY(0); opacity: 1; }

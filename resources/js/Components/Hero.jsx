@@ -228,11 +228,11 @@ export default function Hero({ data = {} }) {
                         <span className="block text-white/40 text-base md:text-xl font-medium font-sans mb-1">
                             Hello, I'm
                         </span>
-                        <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-white">
+                        <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl name-gradient">
                             {firstName}
                         </span>
                         {lastName && (
-                            <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-accent">
+                            <span className="block text-4xl sm:text-5xl md:text-6xl xl:text-7xl name-gradient">
                                 {lastName}
                             </span>
                         )}
