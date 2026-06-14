@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Typed from 'typed.js';
+import MagneticButton from './MagneticButton';
 
 /* ── Syntax-highlighted code lines ── */
 const CODE_LINES = [
@@ -249,13 +250,17 @@ export default function Hero({ data = {} }) {
                     </p>
 
                     <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-6 md:mb-10">
-                        <button onClick={() => scrollTo('contact')} className="btn-primary group">
-                            Hire Me
-                            <i className="bi bi-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-                        </button>
-                        <button onClick={() => scrollTo('portfolio')} className="btn-outline">
-                            View Work
-                        </button>
+                        <MagneticButton strength={0.3}>
+                            <button onClick={() => scrollTo('contact')} className="btn-primary group">
+                                Hire Me
+                                <i className="bi bi-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                            </button>
+                        </MagneticButton>
+                        <MagneticButton strength={0.3}>
+                            <button onClick={() => scrollTo('portfolio')} className="btn-outline">
+                                View Work
+                            </button>
+                        </MagneticButton>
                     </div>
 
                     {socials.length > 0 && (
