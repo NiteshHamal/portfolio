@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import VanillaTilt from 'vanilla-tilt';
 import SectionHeading from './SectionHeading';
 
 const filters = ['all', 'website', 'webapp', 'backend', 'app'];
@@ -55,12 +56,23 @@ function Lightbox({ project, onClose }) {
 
 function ProjectCard({ project, onLightbox }) {
     const { id, title, tech, image, slug, demo_url, github_url, featured } = project;
-    const Tag  = slug ? 'a' : 'div';
-    const attr = slug
+    const Tag     = slug ? 'a' : 'div';
+    const attr    = slug
         ? { href: `/projects/${slug}` }
         : { onClick: () => onLightbox(project), role: 'button', tabIndex: 0 };
+    const tiltRef = useRef(null);
+
+    useEffect(() => {
+        if (!tiltRef.current) return;
+        if (window.matchMedia('(hover: none)').matches) return;
+        VanillaTilt.init(tiltRef.current, {
+            max: 8, speed: 400, glare: true, 'max-glare': 0.12, scale: 1.03,
+        });
+        return () => tiltRef.current?.vanillaTilt?.destroy();
+    }, []);
 
     return (
+        <div ref={tiltRef} className="h-full rounded-xl" style={{ transformStyle: 'preserve-3d' }}>
         <Tag {...attr}
             className="group relative rounded-xl overflow-hidden block cursor-pointer h-full">
 
@@ -130,6 +142,7 @@ function ProjectCard({ project, onLightbox }) {
                 </span>
             </div>
         </Tag>
+        </div>
     );
 }
 

@@ -1,8 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import VanillaTilt from 'vanilla-tilt';
 import SectionHeading from './SectionHeading';
 
 export default function About({ data = {}, skills = [] }) {
+    const photoRef = useRef(null);
+
+    useEffect(() => {
+        if (!photoRef.current) return;
+        if (window.matchMedia('(hover: none)').matches) return;
+        VanillaTilt.init(photoRef.current, {
+            max: 10, speed: 400, glare: true, 'max-glare': 0.1, scale: 1.04,
+        });
+        return () => photoRef.current?.vanillaTilt?.destroy();
+    }, []);
+
     const {
         subtitle  = 'Web & Backend Developer',
         bio1      = '',
@@ -41,7 +53,7 @@ export default function About({ data = {}, skills = [] }) {
                         whileInView={{ clipPath: 'inset(0%   0 0 0 round 16px)' }}
                         viewport={{ once: true, margin: '-80px' }}
                         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
-                        <div className="relative group">
+                        <div ref={photoRef} className="relative group">
                             <div className="absolute -inset-1 bg-accent/20 rounded-2xl blur-xl group-hover:bg-accent/30 transition-all duration-500" />
                             <img src={photo} alt="Profile"
                                 className="relative rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />

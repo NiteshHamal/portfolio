@@ -1,5 +1,35 @@
-import { motion } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import SectionHeading from './SectionHeading';
+
+function Counter({ value }) {
+    const match  = value.match(/^(\d+)(.*)$/);
+    const target = match ? parseInt(match[1], 10) : 0;
+    const suffix = match ? match[2] : value;
+
+    const ref    = useRef(null);
+    const inView = useInView(ref, { once: true, margin: '-60px' });
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        if (!inView) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setCount(target);
+            return;
+        }
+        const duration = 1800;
+        const startTime = performance.now();
+        const tick = (now) => {
+            const t = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3); // ease-out-cubic
+            setCount(Math.round(eased * target));
+            if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    }, [inView, target]);
+
+    return <span ref={ref}>{count}{suffix}</span>;
+}
 
 const ACCENT = '#18d26e';
 
@@ -121,24 +151,27 @@ export default function Testimonials({ testimonials = [] }) {
                 </div>
 
                 {/* Trust badges */}
-                <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="flex flex-wrap justify-center items-center gap-8 mt-14 pt-10 border-t border-white/[0.06]">
+                <div className="flex flex-wrap justify-center items-center gap-8 mt-14 pt-10 border-t border-white/[0.06]">
                     {[
                         { label: 'Projects Delivered', value: '10+' },
                         { label: 'Happy Clients',      value: '8+'  },
                         { label: 'Years Experience',   value: '3+'  },
                         { label: 'On-time Delivery',   value: '100%' },
-                    ].map(({ label, value }) => (
-                        <div key={label} className="text-center">
-                            <div className="text-2xl font-bold font-display text-accent">{value}</div>
+                    ].map(({ label, value }, i) => (
+                        <motion.div
+                            key={label}
+                            initial={{ opacity: 0, y: 12 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-60px' }}
+                            transition={{ duration: 0.4, delay: 0.3 + i * 0.08 }}
+                            className="text-center min-w-[80px]">
+                            <div className="text-2xl font-bold font-display text-accent tabular-nums">
+                                <Counter value={value} />
+                            </div>
                             <div className="text-white/35 text-xs uppercase tracking-widest mt-1">{label}</div>
-                        </div>
+                        </motion.div>
                     ))}
-                </motion.div>
+                </div>
             </div>
         </section>
     );
