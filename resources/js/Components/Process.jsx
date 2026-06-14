@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
 
 const STEPS = [
     {
@@ -33,13 +34,7 @@ export default function Process() {
             <div className="max-w-6xl mx-auto px-6">
 
                 {/* Heading */}
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }}
-                    className="text-center mb-16 heading-glow">
-                    <span className="text-accent text-sm font-display tracking-[4px] uppercase">My Approach</span>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient mt-3">How I Work</h2>
-                    <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
-                </motion.div>
+                <SectionHeading tag="My Approach" title="How I Work" />
 
                 {/* Steps */}
                 <div className="flex flex-col md:flex-row items-stretch gap-4">

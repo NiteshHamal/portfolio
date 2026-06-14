@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
 
 export default function About({ data = {}, skills = [] }) {
     const {
@@ -32,12 +33,7 @@ export default function About({ data = {}, skills = [] }) {
     return (
         <section id="about" className="py-24 bg-dark section-noise">
             <div className="max-w-6xl mx-auto px-6">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
-                    <span className="text-accent text-sm font-display tracking-[4px] uppercase">Who I Am</span>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient mt-3">About Me</h2>
-                    <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
-                </motion.div>
+                <SectionHeading tag="Who I Am" title="About Me" />
 
                 <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
                     <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}

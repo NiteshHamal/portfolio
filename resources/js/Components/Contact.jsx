@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
 
 function FloatField({ label, value, onChange, error, type = 'text', autoComplete, required, textarea, rows = 5 }) {
     const [focused, setFocused] = useState(false);
@@ -67,12 +68,7 @@ export default function Contact({ data = {} }) {
     return (
         <section id="contact" className="py-24 bg-dark section-noise">
             <div className="max-w-6xl mx-auto px-6">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
-                    <span className="text-accent text-sm font-display tracking-[4px] uppercase">Get In Touch</span>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient mt-3">Contact Me</h2>
-                    <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
-                </motion.div>
+                <SectionHeading tag="Get In Touch" title="Contact Me" />
 
                 <div className="grid md:grid-cols-2 gap-12">
                     <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}

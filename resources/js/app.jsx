@@ -6,8 +6,12 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { MotionConfig } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cursor from './Components/Cursor';
 import { LenisContext } from './hooks/useLenis';
+
+gsap.registerPlugin(ScrollTrigger);
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -55,15 +59,15 @@ function SmoothScroll({ children }) {
 
         lenisRef.current = lenis;
 
-        let rafId;
-        function tick(time) {
-            lenis.raf(time);
-            rafId = requestAnimationFrame(tick);
-        }
-        rafId = requestAnimationFrame(tick);
+        // Use GSAP ticker so ScrollTrigger and Lenis share the same frame
+        lenis.on('scroll', ScrollTrigger.update);
+        const lenisRaf = (time) => lenis.raf(time * 1000);
+        gsap.ticker.add(lenisRaf);
+        gsap.ticker.lagSmoothing(0);
 
         return () => {
-            cancelAnimationFrame(rafId);
+            gsap.ticker.remove(lenisRaf);
+            lenis.off('scroll', ScrollTrigger.update);
             lenis.destroy();
             lenisRef.current = null;
         };

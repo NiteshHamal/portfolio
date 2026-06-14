@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import VanillaTilt from 'vanilla-tilt';
+import SectionHeading from './SectionHeading';
 
 function ServiceCard({ icon, title, desc, delay, index }) {
     const cardRef = useRef(null);
@@ -44,12 +45,7 @@ export default function Services({ data = [] }) {
     return (
         <section id="services" className="py-24 bg-dark section-noise">
             <div className="max-w-6xl mx-auto px-6">
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16 heading-glow">
-                    <span className="text-accent text-sm font-display tracking-[4px] uppercase">What I Do</span>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient mt-3">My Services</h2>
-                    <div className="w-16 h-1 bg-accent mx-auto mt-4 rounded-full" />
-                </motion.div>
+                <SectionHeading tag="What I Do" title="My Services" />
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {data.map((s, i) => <ServiceCard key={i} {...s} index={i} delay={i * 0.15} />)}

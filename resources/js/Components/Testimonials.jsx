@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
 
 const ACCENT = '#18d26e';
 
@@ -101,21 +102,10 @@ export default function Testimonials({ testimonials = [] }) {
             <div className="max-w-6xl mx-auto px-6">
 
                 {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-16 heading-glow">
-
-                    <p className="section-tag mb-4">Testimonials</p>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display heading-gradient">
-                        What Clients Say
-                    </h2>
-                    <p className="mt-4 text-white/40 max-w-md mx-auto text-sm leading-relaxed">
-                        Feedback from people I've had the pleasure of building things with.
-                    </p>
-                </motion.div>
+                <SectionHeading
+                    tag="Testimonials"
+                    title="What Clients Say"
+                    subtitle="Feedback from people I've had the pleasure of building things with." />
 
                 {/* Cards grid */}
                 <div className={`grid gap-6 ${
