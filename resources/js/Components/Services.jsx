@@ -15,8 +15,11 @@ function ServiceCard({ icon, title, desc, delay, index }) {
     const num = String(index + 1).padStart(2, '0');
 
     return (
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.6, delay }}
+        <motion.div
+            initial={{ clipPath: 'inset(100% 0 0 0 round 16px)' }}
+            whileInView={{ clipPath: 'inset(0%   0 0 0 round 16px)' }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
             ref={cardRef}
             className="card-glass text-center p-10 group cursor-default select-none relative overflow-hidden">
 

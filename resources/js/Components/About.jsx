@@ -36,8 +36,11 @@ export default function About({ data = {}, skills = [] }) {
                 <SectionHeading tag="Who I Am" title="About Me" />
 
                 <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
-                    <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }} transition={{ duration: 0.7 }}>
+                    <motion.div
+                        initial={{ clipPath: 'inset(100% 0 0 0 round 16px)' }}
+                        whileInView={{ clipPath: 'inset(0%   0 0 0 round 16px)' }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-accent/20 rounded-2xl blur-xl group-hover:bg-accent/30 transition-all duration-500" />
                             <img src={photo} alt="Profile"
@@ -45,8 +48,11 @@ export default function About({ data = {}, skills = [] }) {
                         </div>
                     </motion.div>
 
-                    <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }} transition={{ duration: 0.7 }}>
+                    <motion.div
+                        initial={{ clipPath: 'inset(0 0 100% 0 round 16px)', opacity: 0 }}
+                        whileInView={{ clipPath: 'inset(0 0 0%  0 round 16px)', opacity: 1 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}>
                         <h3 className="text-2xl font-bold font-display text-accent mb-4">{subtitle}</h3>
                         {bio1 && <div className="text-white/60 leading-relaxed mb-6 italic prose-bio" dangerouslySetInnerHTML={{ __html: bio1 }} />}
                         {bio2 && <div className="text-white/60 leading-relaxed mb-8 prose-bio" dangerouslySetInnerHTML={{ __html: bio2 }} />}

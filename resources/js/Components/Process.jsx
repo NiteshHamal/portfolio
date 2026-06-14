@@ -43,10 +43,10 @@ export default function Process() {
 
                             {/* Card */}
                             <motion.div
-                                initial={{ opacity: 0, y: 36 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.55, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                                initial={{ clipPath: 'inset(100% 0 0 0 round 16px)' }}
+                                whileInView={{ clipPath: 'inset(0%   0 0 0 round 16px)' }}
+                                viewport={{ once: true, margin: '-60px' }}
+                                transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                                 className="group relative flex-1 rounded-2xl border border-white/[0.07]
                                            bg-white/[0.03] hover:bg-accent/[0.05] hover:border-accent/25
                                            p-5 md:p-7 overflow-hidden cursor-default

@@ -225,12 +225,12 @@ export default function PortfolioSection({ projects = [] }) {
                 <motion.div layout
                     className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <AnimatePresence>
-                        {filtered.map(project => (
+                        {filtered.map((project, i) => (
                             <motion.div key={project.id} layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.4 }}>
+                                initial={{ clipPath: 'inset(110% 0 0 0 round 12px)' }}
+                                animate={{ clipPath: 'inset(0%   0 0 0 round 12px)' }}
+                                exit={{    clipPath: 'inset(110% 0 0 0 round 12px)' }}
+                                transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}>
                                 <ProjectCard project={project} onLightbox={setLightbox} />
                             </motion.div>
                         ))}
