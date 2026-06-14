@@ -29,7 +29,7 @@ const STEPS = [
 
 export default function Process() {
     return (
-        <section className="py-24 bg-[#080808] section-noise">
+        <section id="process" className="py-24 bg-[#080808] section-noise">
             <div className="max-w-6xl mx-auto px-6">
 
                 {/* Heading */}

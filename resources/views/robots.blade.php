@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /admin
 Disallow: /admin/login
 
-Sitemap: https://niteshhamal.com.np/sitemap.xml
+Sitemap: {{ url('/sitemap.xml') }}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const sections = ['Home', 'About', 'Resume', 'Services', 'Portfolio', 'Contact'];
+const sections = ['Home', 'About', 'Resume', 'Services', 'Portfolio', 'Testimonials', 'Contact'];
 
 export default function SectionDots() {
     const [active,  setActive]  = useState('Home');
