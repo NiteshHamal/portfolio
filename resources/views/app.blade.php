@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#040404">
+    <link rel="manifest" href="/manifest.json">
     <title inertia>{{ config('app.name', 'Nitesh Hamal') }}</title>
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +57,12 @@
     @endif
 </head>
 <body class="antialiased">
+    <a href="#home"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999]
+              focus:px-4 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-white
+              focus:text-sm focus:font-semibold focus:shadow-lg">
+        Skip to content
+    </a>
     @inertia
 </body>
 </html>

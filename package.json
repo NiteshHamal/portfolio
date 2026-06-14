@@ -27,6 +27,7 @@
         "framer-motion": "^12.40.0",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
+        "simple-icons": "^16.23.0",
         "three": "^0.184.0",
         "typed.js": "^3.0.0",
         "vanilla-tilt": "^1.8.1",

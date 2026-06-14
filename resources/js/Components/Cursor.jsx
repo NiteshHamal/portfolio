@@ -25,21 +25,27 @@ export default function Cursor() {
             requestAnimationFrame(animate);
         };
 
-        const onEnter = () => {
-            if (ring.current) ring.current.classList.add('cursor-hover');
+        const onOver = (e) => {
+            if (e.target.closest('a, button, [data-tilt]')) {
+                ring.current?.classList.add('cursor-hover');
+            }
         };
-        const onLeave = () => {
-            if (ring.current) ring.current.classList.remove('cursor-hover');
+        const onOut = (e) => {
+            if (e.target.closest('a, button, [data-tilt]')) {
+                ring.current?.classList.remove('cursor-hover');
+            }
         };
 
         window.addEventListener('mousemove', onMove);
-        document.querySelectorAll('a, button, [data-tilt]').forEach(el => {
-            el.addEventListener('mouseenter', onEnter);
-            el.addEventListener('mouseleave', onLeave);
-        });
+        document.addEventListener('mouseover', onOver);
+        document.addEventListener('mouseout', onOut);
         animate();
 
-        return () => window.removeEventListener('mousemove', onMove);
+        return () => {
+            window.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseover', onOver);
+            document.removeEventListener('mouseout', onOut);
+        };
     }, []);
 
     return (

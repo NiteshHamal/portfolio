@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Preloader() {
-    // Only show once per browser session
-    const [visible, setVisible] = useState(() => !sessionStorage.getItem('preloaded'));
+    // Skip entirely for reduced-motion users; otherwise show once per session
+    const [visible, setVisible] = useState(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+        return !sessionStorage.getItem('preloaded');
+    });
 
     useEffect(() => {
         if (!visible) return;

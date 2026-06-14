@@ -1,19 +1,36 @@
+import {
+    siLaravel, siPhp, siMysql, siReact, siPython,
+    siJavascript, siFlutter, siGit, siTailwindcss,
+    siVite, siHtml5, siBootstrap,
+} from 'simple-icons';
+
 const TECHS = [
-    { name: 'Laravel',    slug: 'laravel',     color: 'FF2D20' },
-    { name: 'PHP',        slug: 'php',         color: 'B0B3E0' },
-    { name: 'MySQL',      slug: 'mysql',       color: '71B9E6' },
-    { name: 'React',      slug: 'react',       color: '61DAFB' },
-    { name: 'Python',     slug: 'python',      color: 'FFD43B' },
-    { name: 'JavaScript', slug: 'javascript',  color: 'F7DF1E' },
-    { name: 'Flutter',    slug: 'flutter',     color: '54C5F8' },
-    { name: 'Git',        slug: 'git',         color: 'F05032' },
-    { name: 'Tailwind',   slug: 'tailwindcss', color: '06B6D4' },
-    { name: 'Vite',       slug: 'vite',        color: '9197FF' },
-    { name: 'HTML5',      slug: 'html5',       color: 'E34F26' },
-    { name: 'Bootstrap',  slug: 'bootstrap',   color: '8A63D2' },
+    { name: 'Laravel',    icon: siLaravel     },
+    { name: 'PHP',        icon: siPhp         },
+    { name: 'MySQL',      icon: siMysql       },
+    { name: 'React',      icon: siReact       },
+    { name: 'Python',     icon: siPython      },
+    { name: 'JavaScript', icon: siJavascript  },
+    { name: 'Flutter',    icon: siFlutter     },
+    { name: 'Git',        icon: siGit         },
+    { name: 'Tailwind',   icon: siTailwindcss },
+    { name: 'Vite',       icon: siVite        },
+    { name: 'HTML5',      icon: siHtml5       },
+    { name: 'Bootstrap',  icon: siBootstrap   },
 ];
 
 const doubled = [...TECHS, ...TECHS];
+
+function TechIcon({ icon }) {
+    return (
+        <svg
+            width="20" height="20" viewBox="0 0 24 24"
+            fill={`#${icon.hex}`}
+            aria-hidden="true">
+            <path d={icon.path} />
+        </svg>
+    );
+}
 
 export default function TechTicker() {
     return (
@@ -28,23 +45,15 @@ export default function TechTicker() {
             <div className="flex animate-ticker" style={{ width: 'max-content' }}>
                 {doubled.map((tech, i) => (
                     <div key={i} className="flex items-center">
-                        {/* Tech chip */}
                         <div className="flex items-center gap-2.5 px-6 py-1 group cursor-default">
-                            <img
-                                src={`https://cdn.simpleicons.org/${tech.slug}/${tech.color}`}
-                                alt={tech.name}
-                                width={20}
-                                height={20}
-                                loading="lazy"
-                                className="opacity-70 group-hover:opacity-100 transition-opacity duration-300"
-                            />
+                            <span className="opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                                <TechIcon icon={tech.icon} />
+                            </span>
                             <span className="text-white/40 text-sm font-display font-medium whitespace-nowrap
                                              group-hover:text-white/80 transition-colors duration-300">
                                 {tech.name}
                             </span>
                         </div>
-
-                        {/* Separator dot */}
                         <span className="text-white/10 text-xs select-none">✦</span>
                     </div>
                 ))}

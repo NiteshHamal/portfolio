@@ -216,3 +216,62 @@
         transition: none !important;
     }
 }
+
+/* ─── Print / PDF resume ─────────────────────────────────── */
+@media print {
+    @page { margin: 1.5cm; }
+
+    /* Hide everything except the resume section */
+    nav,
+    footer,
+    .cursor-dot,
+    .cursor-ring,
+    .fixed,
+    main > *:not(#resume) {
+        display: none !important;
+    }
+
+    /* Clean white canvas */
+    html, body {
+        background: #fff !important;
+        color: #111 !important;
+        font-size: 11pt;
+    }
+
+    /* Section resets */
+    #resume {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+    #resume .section-noise::before { display: none !important; }
+
+    /* Heading */
+    #resume h2        { color: #111 !important; font-size: 22pt; }
+    #resume h3        { color: #111 !important; font-size: 13pt; border-bottom: 1px solid #ddd; padding-bottom: 6pt; }
+    #resume h4        { color: #0d7a3e !important; font-size: 11pt; }
+
+    /* Body text */
+    #resume p,
+    #resume li,
+    #resume span      { color: #333 !important; }
+
+    /* Accent colour */
+    #resume .text-accent { color: #0d7a3e !important; }
+
+    /* Timeline track */
+    #resume .border-l-2  { border-color: #ccc !important; }
+
+    /* Timeline dot */
+    #resume .border-accent { border-color: #0d7a3e !important; }
+    #resume .bg-\[#080808\],
+    #resume .bg-accent\/10 { background: transparent !important; }
+
+    /* Period badge */
+    #resume .bg-white\/10 { background: #f0f0f0 !important; }
+
+    /* Avoid splitting a timeline entry across pages */
+    #resume .relative.pb-8 { page-break-inside: avoid; }
+
+    /* Remove box shadows and blur */
+    * { box-shadow: none !important; backdrop-filter: none !important; }
+}

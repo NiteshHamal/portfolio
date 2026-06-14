@@ -23,7 +23,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 Route::get('/og-image.png', OgImageController::class);
 Route::get('/sitemap.xml', SitemapController::class);
 Route::get('/projects/{project:slug}', [AdminProjectController::class, 'show']);
