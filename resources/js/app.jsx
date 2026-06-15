@@ -3,6 +3,7 @@ import '../css/app.css';
 import { Component, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { MotionConfig } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
@@ -43,6 +44,53 @@ class ErrorBoundary extends Component {
         }
         return this.props.children;
     }
+}
+
+function PageTransitionOverlay() {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        // grab lenis from context via the SmoothScroll parent — we just call
+        // window.scrollTo which Lenis intercepts via its own RAF
+        const show = () => {
+            if (!ref.current) return;
+            ref.current.style.opacity = '1';
+            ref.current.style.pointerEvents = 'all';
+        };
+
+        const hide = () => {
+            // tiny delay so new page DOM is ready before revealing
+            setTimeout(() => {
+                if (!ref.current) return;
+                ref.current.style.opacity = '0';
+                ref.current.style.pointerEvents = 'none';
+                // Refresh ScrollTrigger positions for the new page
+                ScrollTrigger.refresh();
+            }, 40);
+        };
+
+        const offBefore   = router.on('before',   show);
+        const offNavigate = router.on('navigate',  () => { window.scrollTo(0, 0); hide(); });
+        const offError    = router.on('error',     hide);
+
+        return () => { offBefore(); offNavigate(); offError(); };
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            aria-hidden="true"
+            style={{
+                position:       'fixed',
+                inset:          0,
+                background:     '#040404',
+                opacity:        0,
+                pointerEvents:  'none',
+                zIndex:         9990,
+                transition:     'opacity 0.35s ease',
+            }}
+        />
+    );
 }
 
 function SmoothScroll({ children }) {
@@ -90,6 +138,7 @@ createInertiaApp({
                 <SmoothScroll>
                     <MotionConfig reducedMotion="user">
                         <Cursor />
+                        <PageTransitionOverlay />
                         <App {...props} />
                     </MotionConfig>
                 </SmoothScroll>

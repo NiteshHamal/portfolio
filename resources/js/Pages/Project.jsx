@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageTransition from '../Components/PageTransition';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import BackToTop from '../Components/BackToTop';
@@ -56,7 +57,7 @@ export default function ProjectDetail({ project, prev, next, settings = {} }) {
     const [lightbox, setLightbox] = useState(null);
 
     return (
-        <>
+        <PageTransition key={project.slug}>
             <Head title={project.title} />
             <ScrollProgress />
             <Navbar />
@@ -298,6 +299,6 @@ export default function ProjectDetail({ project, prev, next, settings = {} }) {
                     <ShotLightbox shots={shots} startIdx={lightbox} onClose={() => setLightbox(null)} />
                 )}
             </AnimatePresence>
-        </>
+        </PageTransition>
     );
 }

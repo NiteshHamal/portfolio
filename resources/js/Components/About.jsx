@@ -1,10 +1,62 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import VanillaTilt from 'vanilla-tilt';
 import SectionHeading from './SectionHeading';
 
+function SkillBar({ name, val, index, animate }) {
+    const isCore = val >= 75;
+    const delay  = `${index * 0.055}s`;
+    const ease   = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+    return (
+        <div className="group">
+            <div className="flex justify-between items-center mb-2">
+                <span className={`text-sm font-display font-semibold transition-colors duration-300
+                                  ${isCore ? 'text-white/90 group-hover:text-accent' : 'text-white/55 group-hover:text-white/80'}`}>
+                    {name}
+                </span>
+                <span className="text-xs font-mono tabular-nums text-accent/60 group-hover:text-accent transition-colors duration-300">
+                    {val}%
+                </span>
+            </div>
+
+            {/* Track */}
+            <div className="relative h-[5px]">
+                <div className="absolute inset-0 rounded-full bg-white/[0.06]" />
+
+                {/* Fill */}
+                <div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{
+                        width:      animate ? `${val}%` : '0%',
+                        transition: `width 1.3s ${ease} ${delay}`,
+                        background: isCore
+                            ? 'linear-gradient(90deg, rgba(24,210,110,0.4) 0%, #18d26e 100%)'
+                            : 'linear-gradient(90deg, rgba(24,210,110,0.2) 0%, rgba(24,210,110,0.6) 100%)',
+                    }}
+                />
+
+                {/* Glow tip — lives outside the track so it isn't clipped */}
+                <div
+                    className="absolute top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full pointer-events-none"
+                    style={{
+                        left:       animate ? `calc(${val}% - 5px)` : '-5px',
+                        transition: `left 1.3s ${ease} ${delay}`,
+                        background: '#18d26e',
+                        boxShadow:  isCore
+                            ? '0 0 10px 3px rgba(24,210,110,0.7)'
+                            : '0 0 6px 2px rgba(24,210,110,0.4)',
+                    }}
+                />
+            </div>
+        </div>
+    );
+}
+
 export default function About({ data = {}, skills = [] }) {
-    const photoRef = useRef(null);
+    const photoRef  = useRef(null);
+    const skillsRef = useRef(null);
+    const skillsInView = useInView(skillsRef, { once: true, margin: '-80px' });
 
     useEffect(() => {
         if (!photoRef.current) return;
@@ -89,74 +141,29 @@ export default function About({ data = {}, skills = [] }) {
                 </div>
 
                 {skills.length > 0 && (
-                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-20">
-                        <h3 className="text-2xl font-bold font-display text-white mb-10 text-center">My Skills</h3>
-                        <motion.div
-                            className="grid grid-cols-2 md:grid-cols-3 gap-4"
-                            variants={{ show: { transition: { staggerChildren: 0.07 } } }}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true }}>
+                    <motion.div
+                        ref={skillsRef}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.6 }}
+                        className="mb-20">
+                        <h3 className="text-2xl font-bold font-display text-white mb-10 text-center">
+                            My Skills
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-6">
                             {[...skills]
                                 .sort((a, b) => b.val - a.val)
-                                .map(({ name, val }) => {
-                                    const isCore = val >= 75;
-                                    const dots   = Math.round(val / 20);
-                                    const initial = name.charAt(0).toUpperCase();
-                                    return (
-                                        <motion.div key={name}
-                                            variants={{
-                                                hidden: { opacity: 0, y: 24, scale: 0.92 },
-                                                show:   { opacity: 1, y: 0,  scale: 1    },
-                                            }}
-                                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                                            className={`group relative rounded-2xl p-5 overflow-hidden
-                                                        cursor-default select-none border
-                                                        transition-all duration-300
-                                                        hover:scale-[1.03] hover:shadow-xl
-                                                        ${isCore
-                                                            ? 'bg-accent/[0.04] border-accent/20 hover:border-accent/50 hover:bg-accent/[0.08] hover:shadow-accent/10'
-                                                            : 'bg-white/[0.03] border-white/[0.07] hover:border-white/20 hover:bg-white/[0.06] hover:shadow-white/5'
-                                                        }`}>
-
-                                            {/* Top accent bar */}
-                                            <div className={`absolute top-0 inset-x-0 h-[2px] rounded-t-2xl
-                                                ${isCore
-                                                    ? 'bg-gradient-to-r from-transparent via-accent to-transparent'
-                                                    : 'bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'
-                                                }`} />
-
-                                            {/* Faint letter watermark */}
-                                            <span className="absolute -bottom-3 -right-1 text-[4.5rem] font-bold font-display
-                                                             leading-none pointer-events-none select-none
-                                                             text-white/[0.04] group-hover:text-accent/[0.09]
-                                                             transition-colors duration-500">
-                                                {initial}
-                                            </span>
-
-                                            {/* Content */}
-                                            <div className="relative z-10">
-                                                <p className={`text-sm font-display font-semibold text-center mb-4
-                                                               transition-colors duration-300
-                                                               ${isCore ? 'text-white/90 group-hover:text-accent' : 'text-white/55 group-hover:text-white/85'}`}>
-                                                    {name}
-                                                </p>
-                                                <div className="flex justify-center gap-1.5">
-                                                    {Array.from({ length: 5 }, (_, i) => (
-                                                        <div key={i}
-                                                            className={`w-1.5 h-1.5 rounded-full transition-colors duration-300
-                                                                ${i < dots
-                                                                    ? isCore ? 'bg-accent' : 'bg-white/45'
-                                                                    : 'bg-white/10'
-                                                                }`} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
-                        </motion.div>
+                                .map(({ name, val }, i) => (
+                                    <SkillBar
+                                        key={name}
+                                        name={name}
+                                        val={val}
+                                        index={i}
+                                        animate={skillsInView}
+                                    />
+                                ))}
+                        </div>
                     </motion.div>
                 )}
 

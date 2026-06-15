@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import PageTransition from '../Components/PageTransition';
 import Navbar from '../Components/Navbar';
 import Hero from '../Components/Hero';
 import About from '../Components/About';
@@ -21,7 +22,7 @@ export default function Home({ projects = [], settings = {}, testimonials = [] }
     const desc  = seo.description || 'Crafting efficient, scalable web applications with clean code and modern technologies from Kathmandu, Nepal.';
 
     return (
-        <>
+        <PageTransition>
             <Head>
                 <title>{title}</title>
                 <meta head-key="description"   name="description"         content={desc} />
@@ -47,6 +48,6 @@ export default function Home({ projects = [], settings = {}, testimonials = [] }
             <Footer hero={settings.hero} contact={settings.contact} />
             <SectionDots />
             <BackToTop />
-        </>
+        </PageTransition>
     );
 }
