@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Typed from 'typed.js';
 import MagneticButton from './MagneticButton';
+import HeroScene from './HeroScene';
 
 /* ── Syntax-highlighted code lines ── */
 const CODE_LINES = [
@@ -142,9 +143,7 @@ export default function Hero({ data = {} }) {
         youtube       = '',
     } = data;
 
-    const typedEl     = useRef(null);
-    const vantaRef    = useRef(null);
-    const vantaEffect = useRef(null);
+    const typedEl = useRef(null);
 
     useEffect(() => {
         const typed = new Typed(typedEl.current, {
@@ -155,35 +154,6 @@ export default function Hero({ data = {} }) {
         });
         return () => typed.destroy();
     }, [typed_strings]);
-
-    useEffect(() => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        if (window.matchMedia('(hover: none)').matches) return;
-
-        let mounted = true;
-        Promise.all([
-            import('three'),
-            import('vanta/dist/vanta.net.min'),
-        ]).then(([THREE, vantaMod]) => {
-            if (!mounted || vantaEffect.current) return;
-            const VANTA = vantaMod.default || vantaMod;
-            vantaEffect.current = VANTA({
-                el: vantaRef.current,
-                THREE,
-                mouseControls: true,
-                touchControls: true,
-                color: 0x18d26e,
-                backgroundColor: 0x040404,
-                points: 9,
-                maxDistance: 23,
-                spacing: 18,
-            });
-        });
-        return () => {
-            mounted = false;
-            if (vantaEffect.current) { vantaEffect.current.destroy(); vantaEffect.current = null; }
-        };
-    }, []);
 
     const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -197,8 +167,10 @@ export default function Hero({ data = {} }) {
     const lastName = rest.join(' ');
 
     return (
-        <section id="home" ref={vantaRef}
+        <section id="home"
             className="relative min-h-screen flex items-center overflow-hidden">
+
+            <HeroScene />
 
             <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-16 md:py-28
                             grid md:grid-cols-2 gap-10 md:gap-14 items-center">
