@@ -127,6 +127,23 @@
     animation: scroll-dot 1.8s ease-in-out infinite;
 }
 
+/* ─── Morphing blob ──────────────────────────────────────── */
+@keyframes blob-morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  14%       { border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%; }
+  28%       { border-radius: 55% 45% 40% 60% / 35% 65% 45% 55%; }
+  42%       { border-radius: 35% 65% 65% 35% / 55% 35% 65% 45%; }
+  57%       { border-radius: 65% 35% 45% 55% / 45% 55% 35% 65%; }
+  71%       { border-radius: 45% 55% 35% 65% / 65% 45% 55% 35%; }
+  85%       { border-radius: 55% 45% 60% 40% / 40% 60% 40% 60%; }
+}
+.blob-morph {
+    animation: blob-morph 20s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .blob-morph { animation: none; }
+}
+
 /* ─── Typed cursor colour ────────────────────────────────── */
 .typed-cursor { color: #18d26e; }
 

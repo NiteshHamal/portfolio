@@ -10,6 +10,7 @@ import Lenis from '@studio-freight/lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cursor from './Components/Cursor';
+import FilmGrain from './Components/FilmGrain';
 import { LenisContext } from './hooks/useLenis';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -138,6 +139,7 @@ createInertiaApp({
                 <SmoothScroll>
                     <MotionConfig reducedMotion="user">
                         <Cursor />
+                        <FilmGrain />
                         <PageTransitionOverlay />
                         <App {...props} />
                     </MotionConfig>

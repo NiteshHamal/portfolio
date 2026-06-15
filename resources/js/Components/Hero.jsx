@@ -264,6 +264,19 @@ export default function Hero({ data = {} }) {
 
                     <div className="relative mt-6 w-full max-w-[420px]">
 
+                        {/* Morphing blob — breathing ambient glow behind the code window */}
+                        <div
+                            aria-hidden="true"
+                            className="blob-morph absolute pointer-events-none
+                                       top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                                       w-[520px] h-[480px]"
+                            style={{
+                                background:   'radial-gradient(ellipse at center, rgba(24,210,110,0.14) 0%, rgba(24,210,110,0.05) 55%, transparent 75%)',
+                                filter:       'blur(52px)',
+                                borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
+                            }}
+                        />
+
                         {/* Ambient glow */}
                         <div className="absolute -inset-6 bg-accent/[0.06] rounded-3xl blur-3xl pointer-events-none" />
 
