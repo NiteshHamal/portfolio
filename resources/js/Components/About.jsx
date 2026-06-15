@@ -20,11 +20,9 @@ function SkillBar({ name, val, index, animate }) {
                 </span>
             </div>
 
-            {/* Track */}
             <div className="relative h-[5px]">
                 <div className="absolute inset-0 rounded-full bg-white/[0.06]" />
 
-                {/* Fill */}
                 <div
                     className="absolute inset-y-0 left-0 rounded-full"
                     style={{
@@ -36,7 +34,7 @@ function SkillBar({ name, val, index, animate }) {
                     }}
                 />
 
-                {/* Glow tip — lives outside the track so it isn't clipped */}
+                {/* Glow tip */}
                 <div
                     className="absolute top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full pointer-events-none"
                     style={{
@@ -54,9 +52,9 @@ function SkillBar({ name, val, index, animate }) {
 }
 
 export default function About({ data = {}, skills = [] }) {
-    const photoRef  = useRef(null);
-    const skillsRef = useRef(null);
-    const skillsInView = useInView(skillsRef, { once: true, margin: '-80px' });
+    const photoRef   = useRef(null);
+    const skillsRef  = useRef(null);
+    const skillsInView = useInView(skillsRef, { once: true, margin: '-40px' });
 
     useEffect(() => {
         if (!photoRef.current) return;
@@ -95,62 +93,113 @@ export default function About({ data = {}, skills = [] }) {
     ].filter(([, v]) => v);
 
     return (
-        <section id="about" className="py-24 bg-dark section-noise">
+        <section id="about" className="py-20 md:py-24 bg-dark section-noise">
             <div className="max-w-6xl mx-auto px-6">
                 <SectionHeading tag="Who I Am" title="About Me" />
 
-                <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
+                {/* ── Photo + bio grid ── */}
+                <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center mb-16 md:mb-20">
+
+                    {/* Photo */}
                     <motion.div
-                        initial={{ clipPath: 'inset(100% 0 0 0 round 16px)' }}
-                        whileInView={{ clipPath: 'inset(0%   0 0 0 round 16px)' }}
-                        viewport={{ once: true, margin: '-80px' }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-20px' }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
+
                         <div ref={photoRef} className="relative group">
-                            <div className="absolute -inset-1 bg-accent/20 rounded-2xl blur-xl group-hover:bg-accent/30 transition-all duration-500" />
-                            <img src={photo} alt="Profile"
-                                className="relative rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+                            {/* Accent glow */}
+                            <div className="absolute -inset-1 bg-accent/20 rounded-2xl blur-xl
+                                            group-hover:bg-accent/30 transition-all duration-500" />
+
+                            {/* Corner brackets */}
+                            <div className="absolute -top-2.5 -left-2.5 w-6 h-6 border-t-2 border-l-2 border-accent rounded-tl z-10 pointer-events-none" />
+                            <div className="absolute -top-2.5 -right-2.5 w-6 h-6 border-t-2 border-r-2 border-accent rounded-tr z-10 pointer-events-none" />
+                            <div className="absolute -bottom-2.5 -left-2.5 w-6 h-6 border-b-2 border-l-2 border-accent rounded-bl z-10 pointer-events-none" />
+                            <div className="absolute -bottom-2.5 -right-2.5 w-6 h-6 border-b-2 border-r-2 border-accent rounded-br z-10 pointer-events-none" />
+
+                            <img
+                                src={photo}
+                                alt="Profile"
+                                className="relative rounded-2xl w-full object-cover
+                                           transition-transform duration-500 group-hover:scale-[1.02]"
+                            />
+
+                            {/* Floating experience badge — mobile */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true, margin: '-20px' }}
+                                transition={{ delay: 0.5, duration: 0.4 }}
+                                className="absolute -bottom-4 -right-4 z-20
+                                           bg-[#0c0c0c] border border-accent/30 rounded-2xl
+                                           px-4 py-3 shadow-xl shadow-black/60 text-center">
+                                <div className="text-accent font-bold text-xl font-display leading-none">3+</div>
+                                <div className="text-white/40 text-[10px] uppercase tracking-wider mt-0.5">Years Exp.</div>
+                            </motion.div>
                         </div>
                     </motion.div>
 
+                    {/* Bio + details */}
                     <motion.div
-                        initial={{ clipPath: 'inset(0 0 100% 0 round 16px)', opacity: 0 }}
-                        whileInView={{ clipPath: 'inset(0 0 0%  0 round 16px)', opacity: 1 }}
-                        viewport={{ once: true, margin: '-80px' }}
-                        transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}>
-                        <h3 className="text-2xl font-bold font-display text-accent mb-4">{subtitle}</h3>
-                        {bio1 && <div className="text-white/60 leading-relaxed mb-6 italic prose-bio" dangerouslySetInnerHTML={{ __html: bio1 }} />}
-                        {bio2 && <div className="text-white/60 leading-relaxed mb-8 prose-bio" dangerouslySetInnerHTML={{ __html: bio2 }} />}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-20px' }}
+                        transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}>
+
+                        <h3 className="text-xl md:text-2xl font-bold font-display text-accent mb-4">
+                            {subtitle}
+                        </h3>
+
+                        {bio1 && (
+                            <div
+                                className="text-white/60 text-sm md:text-base leading-relaxed mb-4 italic prose-bio"
+                                dangerouslySetInnerHTML={{ __html: bio1 }}
+                            />
+                        )}
+                        {bio2 && (
+                            <div
+                                className="text-white/60 text-sm md:text-base leading-relaxed mb-6 prose-bio"
+                                dangerouslySetInnerHTML={{ __html: bio2 }}
+                            />
+                        )}
 
                         {details.length > 0 && (
-                            <div className="grid grid-cols-2 gap-3 mb-8 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 mb-8 text-sm">
                                 {details.map(([k, v]) => (
-                                    <div key={k} className="flex items-center gap-2">
-                                        <i className="bi bi-chevron-right text-accent text-xs" />
-                                        <span className="text-white/40">{k}:</span>
-                                        <span className="text-white/80 font-medium truncate">{v}</span>
+                                    <div key={k} className="flex items-start gap-2 min-w-0">
+                                        <i className="bi bi-chevron-right text-accent text-xs mt-[3px] shrink-0" />
+                                        <span className="text-white/40 shrink-0">{k}:</span>
+                                        <span className="text-white/80 font-medium truncate min-w-0">{v}</span>
                                     </div>
                                 ))}
                             </div>
                         )}
 
-                        <a href={cv_url} download
-                            className="btn-primary inline-flex items-center gap-2">
-                            <i className="bi bi-download" /> Download CV
+                        <a
+                            href={cv_url}
+                            download
+                            className="btn-primary inline-flex items-center gap-2 w-full sm:w-auto justify-center">
+                            <i className="bi bi-download" />
+                            Download CV
                         </a>
                     </motion.div>
                 </div>
 
+                {/* ── Skills ── */}
                 {skills.length > 0 && (
                     <motion.div
                         ref={skillsRef}
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-80px' }}
+                        viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.6 }}
-                        className="mb-20">
-                        <h3 className="text-2xl font-bold font-display text-white mb-10 text-center">
+                        className="mb-12 md:mb-20">
+
+                        <h3 className="text-xl md:text-2xl font-bold font-display text-white mb-8 md:mb-10 text-center">
                             My Skills
                         </h3>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-6">
                             {[...skills]
                                 .sort((a, b) => b.val - a.val)
@@ -166,7 +215,6 @@ export default function About({ data = {}, skills = [] }) {
                         </div>
                     </motion.div>
                 )}
-
             </div>
         </section>
     );

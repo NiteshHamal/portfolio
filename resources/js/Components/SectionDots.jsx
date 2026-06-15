@@ -34,7 +34,7 @@ export default function SectionDots() {
 
     return (
         <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50
-                        flex flex-col items-center gap-3 lg:gap-4">
+                        hidden md:flex flex-col items-center gap-3 lg:gap-4">
             {sections.map(section => {
                 const isActive = active === section;
                 return (

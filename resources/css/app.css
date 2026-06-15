@@ -6,12 +6,16 @@
 /* ─── Base ─────────────────────────────────────────────── */
 @layer base {
     * { box-sizing: border-box; }
-    html { scroll-behavior: auto; }
+    html {
+        scroll-behavior: auto;
+        overflow-x: hidden; /* prevent horizontal bleed from absolutely-positioned decorations */
+    }
     body {
         background-color: #040404;
         color: #ffffff;
         font-family: 'Open Sans', sans-serif;
         cursor: none;
+        overflow-x: hidden;
     }
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #040404; }
@@ -235,6 +239,62 @@
     }
 }
 
+/* ─── Mobile carousel — hide scrollbar cross-browser ──────── */
+.snap-x::-webkit-scrollbar { display: none; }
+.snap-x { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Mobile carousel fade edges (left/right) ─────────────── */
+.carousel-fade-edges {
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0px,
+        black 32px,
+        black calc(100% - 32px),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent 0px,
+        black 32px,
+        black calc(100% - 32px),
+        transparent 100%
+    );
+}
+
+/* ─── Touch press feedback ───────────────────────────────── */
+@media (hover: none) {
+    .card-glass:active,
+    button:active { transform: scale(0.97); }
+    .btn-primary:active, .btn-outline:active { transform: scale(0.96); }
+}
+
+/* ─── Floating animation for decorative elements ────────── */
+@keyframes float-y {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+}
+.animate-float {
+    animation: float-y 3.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .animate-float { animation: none; }
+}
+
+/* ─── Mobile menu clip-path fix ──────────────────────────── */
+@supports not (clip-path: circle(0% at 0% 0%)) {
+    /* Fallback for older browsers */
+    [style*="clipPath"] { clip-path: none !important; }
+}
+
+/* ─── Safe area helpers ──────────────────────────────────── */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pt-safe { padding-top:    env(safe-area-inset-top,    0px); }
+
+/* ─── Snap scroll momentum on iOS ───────────────────────── */
+@media (max-width: 768px) {
+    .snap-x { -webkit-overflow-scrolling: touch; }
+}
+
 /* ─── Reduced motion ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
     /* Stop all CSS keyframe animations */
@@ -306,10 +366,11 @@
 
     /* Timeline dot */
     #resume .border-accent { border-color: #0d7a3e !important; }
-    #resume .bg-\[#080808\],
-    #resume .bg-accent\/10 { background: transparent !important; }
 
-    /* Period badge */
+    /* Dark backgrounds inside resume should be transparent when printed */
+    #resume [class*="bg-"] { background: transparent !important; }
+
+    /* Period badge override (must come after the above) */
     #resume .bg-white\/10 { background: #f0f0f0 !important; }
 
     /* Avoid splitting a timeline entry across pages */

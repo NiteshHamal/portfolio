@@ -177,17 +177,17 @@ export default function Hero({ data = {} }) {
 
                 {/* ── LEFT: text ── */}
                 <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    className="order-2 md:order-1 text-center md:text-left">
+                    className="text-center md:text-left">
 
                     <motion.div
                         initial={{ opacity: 0, y: -12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.5 }}
                         className="inline-flex items-center gap-2.5 bg-accent/10 border border-accent/25
-                                   rounded-full px-4 py-1.5 mb-8 md:mb-10">
+                                   rounded-full px-4 py-1.5 mb-6 md:mb-10">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
@@ -221,15 +221,18 @@ export default function Hero({ data = {} }) {
                         {description}
                     </p>
 
-                    <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-6 md:mb-10">
+                    {/* Buttons — full width on mobile */}
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start mb-6 md:mb-10">
                         <MagneticButton strength={0.3}>
-                            <button onClick={() => scrollTo('contact')} className="btn-primary group">
+                            <button onClick={() => scrollTo('contact')}
+                                className="btn-primary group w-full sm:w-auto">
                                 Hire Me
                                 <i className="bi bi-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                             </button>
                         </MagneticButton>
                         <MagneticButton strength={0.3}>
-                            <button onClick={() => scrollTo('portfolio')} className="btn-outline">
+                            <button onClick={() => scrollTo('portfolio')}
+                                className="btn-outline w-full sm:w-auto">
                                 View Work
                             </button>
                         </MagneticButton>
@@ -243,7 +246,7 @@ export default function Hero({ data = {} }) {
                                 {socials.map(({ href, icon, label }) => (
                                     <a key={icon} href={href} target="_blank" rel="noopener noreferrer"
                                         title={label}
-                                        className="w-9 h-9 rounded-full bg-white/[0.07] border border-white/10
+                                        className="w-10 h-10 rounded-full bg-white/[0.07] border border-white/10
                                                    hover:bg-accent hover:border-accent
                                                    flex items-center justify-center text-white/50 hover:text-white
                                                    transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-accent/25">
@@ -255,69 +258,71 @@ export default function Hero({ data = {} }) {
                     )}
                 </motion.div>
 
-                {/* ── RIGHT: code window ── */}
+                {/* ── RIGHT: code window — visible on mobile too ── */}
                 <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.15 }}
-                    className="order-1 md:order-2 hidden md:flex items-center justify-center md:justify-end">
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
+                    className="flex items-center justify-center md:justify-end mt-2 md:mt-0">
 
-                    <div className="relative mt-6 w-full max-w-[420px]">
+                    <div className="relative w-full max-w-sm md:max-w-[420px]">
 
-                        {/* Morphing blob — breathing ambient glow behind the code window */}
+                        {/* Morphing blob */}
                         <div
                             aria-hidden="true"
                             className="blob-morph absolute pointer-events-none
                                        top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                                       w-[520px] h-[480px]"
+                                       w-[340px] md:w-[520px] h-[320px] md:h-[480px]"
                             style={{
                                 background:   'radial-gradient(ellipse at center, rgba(24,210,110,0.14) 0%, rgba(24,210,110,0.05) 55%, transparent 75%)',
-                                filter:       'blur(52px)',
+                                filter:       'blur(40px)',
                                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
                             }}
                         />
 
                         {/* Ambient glow */}
-                        <div className="absolute -inset-6 bg-accent/[0.06] rounded-3xl blur-3xl pointer-events-none" />
+                        <div className="absolute -inset-4 md:-inset-6 bg-accent/[0.05] rounded-3xl blur-3xl pointer-events-none" />
 
-                        {/* Corner brackets */}
-                        <div className="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 border-accent rounded-tl z-20 pointer-events-none" />
-                        <div className="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-accent rounded-tr z-20 pointer-events-none" />
-                        <div className="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-accent rounded-bl z-20 pointer-events-none" />
-                        <div className="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 border-accent rounded-br z-20 pointer-events-none" />
+                        {/* Corner brackets — smaller on mobile */}
+                        <div className="absolute -top-2 -left-2 md:-top-3 md:-left-3 w-6 md:w-8 h-6 md:h-8 border-t-2 border-l-2 border-accent rounded-tl z-20 pointer-events-none" />
+                        <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-6 md:w-8 h-6 md:h-8 border-t-2 border-r-2 border-accent rounded-tr z-20 pointer-events-none" />
+                        <div className="absolute -bottom-2 -left-2 md:-bottom-3 md:-left-3 w-6 md:w-8 h-6 md:h-8 border-b-2 border-l-2 border-accent rounded-bl z-20 pointer-events-none" />
+                        <div className="absolute -bottom-2 -right-2 md:-bottom-3 md:-right-3 w-6 md:w-8 h-6 md:h-8 border-b-2 border-r-2 border-accent rounded-br z-20 pointer-events-none" />
 
                         <CodeWindow />
 
-                        {/* Available badge — bottom center */}
-                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-30
+                        {/* Available badge — bottom center, inside on mobile */}
+                        <div className="absolute bottom-3 md:-bottom-5 left-1/2 -translate-x-1/2 z-30
                                         bg-[#0c0c0c] border border-accent/30 rounded-full
-                                        px-5 py-2.5 flex items-center gap-2.5
+                                        px-4 md:px-5 py-2 md:py-2.5 flex items-center gap-2
                                         shadow-xl shadow-black/60 whitespace-nowrap backdrop-blur-sm">
-                            <span className="relative flex h-2.5 w-2.5">
+                            <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
+                                <span className="relative inline-flex rounded-full h-full w-full bg-accent" />
                             </span>
-                            <span className="text-white/80 text-xs font-semibold tracking-wide">
+                            <span className="text-white/80 text-[11px] md:text-xs font-semibold tracking-wide">
                                 Available for Work
                             </span>
                         </div>
 
-                        {/* Experience chip — top right */}
+                        {/* Experience chip — inside corner on mobile, floating outside on desktop */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.7, duration: 0.4 }}
-                            className="absolute -top-5 -right-5 z-30 bg-[#0c0c0c] border border-white/10
-                                       rounded-2xl px-4 py-3 shadow-xl shadow-black/60 text-center">
-                            <div className="text-accent font-bold text-xl font-display leading-none">3+</div>
-                            <div className="text-white/35 text-[10px] uppercase tracking-wider mt-1">Years Exp.</div>
+                            className="absolute top-3 right-3 md:-top-5 md:-right-5 z-30
+                                       bg-[#0c0c0c] border border-white/10
+                                       rounded-xl md:rounded-2xl px-3 md:px-4 py-2 md:py-3
+                                       shadow-xl shadow-black/60 text-center">
+                            <div className="text-accent font-bold text-lg md:text-xl font-display leading-none">3+</div>
+                            <div className="text-white/35 text-[9px] md:text-[10px] uppercase tracking-wider mt-0.5">Yrs Exp.</div>
                         </motion.div>
                     </div>
                 </motion.div>
             </div>
 
             {/* Scroll indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce hidden sm:block">
                 <div className="w-6 h-10 rounded-full border-2 border-white/25 flex items-start justify-center pt-2">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full animate-scroll-dot" />
                 </div>
