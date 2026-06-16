@@ -72,7 +72,7 @@ export default function Navbar() {
                     </a>
 
                     {/* Desktop links */}
-                    <ul className="hidden md:flex items-center gap-8">
+                    <ul className="hidden lg:flex items-center gap-6 xl:gap-8">
                         {links.map(link => (
                             <li key={link}>
                                 <button
@@ -92,7 +92,7 @@ export default function Navbar() {
                     {/* Hire Me CTA — desktop */}
                     <button
                         onClick={() => scrollTo('contact')}
-                        className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full
+                        className="hidden lg:inline-flex items-center gap-2 px-5 py-2 rounded-full
                                    border border-accent text-accent text-sm font-semibold font-display
                                    hover:bg-accent hover:text-white transition-all duration-300
                                    hover:shadow-lg hover:shadow-accent/30">
@@ -100,10 +100,10 @@ export default function Navbar() {
                         <i className="bi bi-arrow-right text-xs" />
                     </button>
 
-                    {/* Mobile hamburger — always on top */}
+                    {/* Hamburger — visible on mobile + tablet (< lg) */}
                     <button
                         onClick={() => setOpen(v => !v)}
-                        className="md:hidden relative z-[70] w-10 h-10 flex flex-col items-center justify-center gap-[5px]"
+                        className="lg:hidden relative z-[70] w-10 h-10 flex flex-col items-center justify-center gap-[5px]"
                         aria-label="Toggle menu">
                         <span className={`block h-[2px] bg-white rounded-full transition-all duration-350 origin-center ${
                             open ? 'w-6 rotate-45 translate-y-[7px]' : 'w-6'
@@ -127,7 +127,7 @@ export default function Navbar() {
                         animate={{ clipPath: 'circle(250% at 93% 5%)' }}
                         exit={{ clipPath: 'circle(0% at 93% 5%)' }}
                         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed inset-0 z-[55] md:hidden flex flex-col"
+                        className="fixed inset-0 z-[55] lg:hidden flex flex-col"
                         style={{ background: '#040404' }}>
 
                         {/* Ambient glows */}

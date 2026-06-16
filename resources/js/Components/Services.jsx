@@ -83,8 +83,8 @@ export default function Services({ data = [] }) {
             <div className="max-w-6xl mx-auto px-6">
                 <SectionHeading tag="What I Do" title="My Services" />
 
-                {/* ── Mobile: horizontal snap carousel ── */}
-                <div className="md:hidden">
+                {/* ── Mobile + tablet: horizontal snap carousel ── */}
+                <div className="lg:hidden">
                     <div
                         ref={scrollRef}
                         onScroll={handleScroll}
@@ -97,7 +97,7 @@ export default function Services({ data = [] }) {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true, margin: '-40px' }}
                                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                                className="snap-center shrink-0 w-[78vw]">
+                                className="snap-center shrink-0 w-[78vw] md:w-[44vw]">
                                 <ServiceCard {...s} index={i} delay={0} mobile />
                             </motion.div>
                         ))}
@@ -123,7 +123,7 @@ export default function Services({ data = [] }) {
                 </div>
 
                 {/* ── Desktop: 3-col grid ── */}
-                <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="hidden lg:grid lg:grid-cols-3 gap-8">
                     {data.map((s, i) => <ServiceCard key={i} {...s} index={i} delay={i * 0.15} />)}
                 </div>
             </div>

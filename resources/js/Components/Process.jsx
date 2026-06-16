@@ -112,8 +112,56 @@ export default function Process() {
                     </div>
                 </div>
 
+                {/* ── Tablet: 2×2 grid ── */}
+                <div className="hidden md:grid lg:hidden grid-cols-2 gap-5">
+                    {STEPS.map((step, i) => (
+                        <motion.div
+                            key={step.num}
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-40px' }}
+                            transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                            className="group relative rounded-2xl border border-white/[0.07]
+                                       bg-white/[0.03] hover:bg-accent/[0.05] hover:border-accent/25
+                                       p-6 overflow-hidden cursor-default
+                                       transition-all duration-300">
+
+                            <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl
+                                            bg-gradient-to-r from-transparent via-accent to-transparent
+                                            opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
+
+                            <span className="absolute -bottom-3 -right-1
+                                             text-[5rem] font-bold font-display leading-none
+                                             text-white/[0.04] group-hover:text-accent/[0.08]
+                                             transition-colors duration-500 select-none pointer-events-none">
+                                {step.num}
+                            </span>
+
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20
+                                                    flex items-center justify-center shrink-0
+                                                    group-hover:bg-accent group-hover:border-accent
+                                                    transition-all duration-300">
+                                        <i className={`bi ${step.icon} text-accent text-base
+                                                       group-hover:text-white transition-colors duration-300`} />
+                                    </div>
+                                    <span className="text-[10px] font-display font-bold text-accent/50 tracking-[3px] uppercase">
+                                        {step.num}
+                                    </span>
+                                </div>
+                                <h3 className="text-white font-bold font-display text-base mb-2
+                                               group-hover:text-accent transition-colors duration-300">
+                                    {step.title}
+                                </h3>
+                                <p className="text-white/45 text-sm leading-relaxed">{step.desc}</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+
                 {/* ── Desktop: horizontal flow ── */}
-                <div className="hidden md:flex flex-row items-stretch gap-4">
+                <div className="hidden lg:flex flex-row items-stretch gap-4">
                     {STEPS.map((step, i) => (
                         <div key={step.num} className="flex flex-row items-stretch flex-1 gap-4">
 

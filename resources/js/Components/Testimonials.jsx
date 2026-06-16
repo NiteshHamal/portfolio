@@ -161,15 +161,15 @@ export default function Testimonials({ testimonials = [] }) {
                     title="What Clients Say"
                     subtitle="Feedback from people I've had the pleasure of building things with." />
 
-                {/* ── Mobile: horizontal snap carousel ── */}
-                <div className="md:hidden">
+                {/* ── Mobile + tablet: horizontal snap carousel ── */}
+                <div className="lg:hidden">
                     <div
                         ref={scrollRef}
                         onScroll={handleScroll}
                         className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6"
                         style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
                         {testimonials.map((t, i) => (
-                            <div key={t.id} className="snap-center shrink-0 w-[85vw]">
+                            <div key={t.id} className="snap-center shrink-0 w-[85vw] md:w-[52vw]">
                                 <TestimonialCard t={t} index={i} alwaysVisible />
                             </div>
                         ))}
@@ -194,12 +194,12 @@ export default function Testimonials({ testimonials = [] }) {
                 </div>
 
                 {/* ── Desktop: grid ── */}
-                <div className={`hidden md:grid gap-6 ${
+                <div className={`hidden lg:grid gap-6 ${
                     testimonials.length === 1
                         ? 'max-w-xl mx-auto'
                         : testimonials.length === 2
-                        ? 'md:grid-cols-2 max-w-3xl mx-auto'
-                        : 'md:grid-cols-2 lg:grid-cols-3'
+                        ? 'lg:grid-cols-2 max-w-3xl mx-auto'
+                        : 'lg:grid-cols-2 xl:grid-cols-3'
                 }`}>
                     {testimonials.map((t, i) => (
                         <TestimonialCard key={t.id} t={t} index={i} />
